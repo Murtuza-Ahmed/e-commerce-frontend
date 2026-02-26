@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": {
+    "name": "Al Ucaaz",
+    "email": "murtuza.programmer@gmail.com"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
