@@ -3,6 +3,7 @@ import { Heart } from "lucide-react";
 import { Product } from "@/types";
 import { useWishlistStore } from "@/store/wishlist";
 import { motion } from "framer-motion";
+import { formatPrice } from "@/lib/format";
 
 interface ProductCardProps {
   product: Product;
@@ -76,9 +77,9 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
           </h3>
         </Link>
         <div className="flex items-center gap-2">
-          <span className="font-body font-semibold text-sm">${product.basePrice}</span>
+          <span className="font-body font-semibold text-sm">{formatPrice(product.basePrice)}</span>
           {product.compareAtPrice && (
-            <span className="text-muted-foreground text-xs line-through">${product.compareAtPrice}</span>
+            <span className="text-muted-foreground text-xs line-through">{formatPrice(product.compareAtPrice)}</span>
           )}
         </div>
         {/* Color swatches */}

@@ -8,11 +8,13 @@ import { FormField } from "@/components/ui/FormField";
 import { checkoutSchema, CheckoutInput } from "@/lib/validators";
 import { formatPrice } from "@/lib/format";
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_COST, TAX_RATE } from "@/constants";
+import { Check } from "lucide-react";
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCartStore();
   const { isAuthenticated } = useAuthStore();
   const [placing, setPlacing] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState<CheckoutInput>({
     email: "",
@@ -33,6 +35,38 @@ const Checkout = () => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
   };
+
+  if (orderId) {
+    return (
+      <div className="container py-20 text-center max-w-md mx-auto">
+        <SEO title="Order Confirmed" />
+        <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-success/10 flex items-center justify-center">
+          <Check className="w-8 h-8 text-success" />
+        </div>
+        <h1 className="text-3xl font-display font-bold mb-3">Thank You!</h1>
+        <p className="text-sm font-body text-muted-foreground mb-2">
+          Your order has been placed successfully.
+        </p>
+        <p className="text-sm font-body font-semibold mb-8">
+          Order <span className="text-primary">{orderId}</span>
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link
+            to="/shop"
+            className="bg-foreground text-background px-8 py-3.5 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity"
+          >
+            Continue Shopping
+          </Link>
+          <Link
+            to="/dashboard"
+            className="border border-border px-8 py-3.5 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:bg-muted transition-colors"
+          >
+            Track Order
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -59,8 +93,10 @@ const Checkout = () => {
     }
 
     setPlacing(true);
+    const newOrderId = `ORD-${Date.now().toString().slice(-6)}`;
     setTimeout(() => {
       clearCart();
+      setOrderId(newOrderId);
       toast.success("Order placed successfully! 🎉");
       setPlacing(false);
     }, 2000);
@@ -129,7 +165,7 @@ const Checkout = () => {
             <div className="space-y-3 mb-4">
               {items.map((item) => (
                 <div key={item.variant.id} className="flex gap-3">
-                  <div className="w-14 h-18 flex-shrink-0 overflow-hidden rounded-sm bg-muted relative">
+                  <div className="w-14 h-20 flex-shrink-0 overflow-hidden rounded-sm bg-muted relative">
                     <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
                     <span className="absolute -top-1 -right-1 bg-foreground text-background text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-body font-bold">
                       {item.quantity}

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useWishlistStore } from "@/store/wishlist";
 import { useCartStore } from "@/store/cart";
 import { Heart, ShoppingBag, X } from "lucide-react";
@@ -10,6 +10,18 @@ import { formatPrice } from "@/lib/format";
 const Wishlist = () => {
   const { items, removeItem } = useWishlistStore();
   const addToCart = useCartStore((s) => s.addItem);
+  const navigate = useNavigate();
+
+  const handleAddToCart = (item: (typeof items)[number]) => {
+    const needsSelection = item.product.variants.some((v) => v.size || v.color);
+    if (needsSelection) {
+      // Products with size/color options need the user to pick a variant first
+      navigate(`/product/${item.product.slug}`);
+      return;
+    }
+    addToCart(item.product, item.product.variants[0], 1);
+    toast.success("Added to cart");
+  };
 
   if (items.length === 0) {
     return (
@@ -51,10 +63,7 @@ const Wishlist = () => {
                 </button>
                 <div className="absolute inset-x-0 bottom-0 p-3">
                   <button
-                    onClick={() => {
-                      addToCart(item.product, item.product.variants[0], 1);
-                      toast.success("Added to cart");
-                    }}
+                    onClick={() => handleAddToCart(item)}
                     className="w-full flex items-center justify-center gap-2 bg-background/90 backdrop-blur-sm py-2.5 rounded-sm text-xs font-body font-semibold tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <ShoppingBag className="w-3.5 h-3.5" />
