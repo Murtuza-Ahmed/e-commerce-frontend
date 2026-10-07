@@ -14,8 +14,12 @@ const DEFAULT_DESC = "Premium curated fashion — luxury clothing, accessories &
 
 export function SEO({ title, description = DEFAULT_DESC, image, url, type = "website", schema }: SEOProps) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Premium Fashion`;
-  // Har page ko automatic canonical + og:url milta hai (duplicate-content se bachao)
-  const pagePath = typeof window !== "undefined" ? window.location.pathname : "/";
+  // Har page ko automatic canonical + og:url milta hai (duplicate-content se bachao).
+  // SSR/prerender me window nahi hota, wahan prerender-entry path set karta hai.
+  const pagePath =
+    typeof window !== "undefined"
+      ? window.location.pathname
+      : (globalThis as { __PRERENDER_PATH__?: string }).__PRERENDER_PATH__ ?? "/";
   const canonicalUrl = url ?? `${SITE_URL}${pagePath}`;
   const ogImage = image ?? DEFAULT_OG_IMAGE;
 

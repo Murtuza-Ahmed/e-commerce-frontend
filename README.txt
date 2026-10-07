@@ -1,23 +1,14 @@
-Al-ucaaz SEO fixes (2026-10-05)
+Al-ucaaz PRERENDERING (SEO) - 2026-10-08
 
 INSTRUCTIONS:
-1. Is zip ko apne repo ke ROOT folder me "Extract Here" karo aur "Yes to All" dabao.
-2. Zaroori: jab site ka real domain final ho to in 3 jagah "https://al-ucaaz.com" ko apne domain se replace karna:
-   - src/constants/index.ts (SITE_URL)
-   - index.html (og:url, og:image, twitter:image)
-   - public/robots.txt (Sitemap line)
-   Ya build time par SITE_URL env var de do: SITE_URL=https://myshop.com npm run build
-3. public/og-image.jpg me apni 1200x630 brand cover image rakho (WhatsApp/Facebook share preview ke liye).
+1. Pehle wali SEO zip (e-commerce-seo-fixes.zip) lagi honi chahiye, phir is zip ko repo ROOT me "Extract Here" karo aur "Yes to All" dabao.
+2. npm install (koi nayi dependency nahi, phir bhi ek bar kar lena)
+3. npm run build
 
-CHANGES:
-- public/sitemap.xml (NEW, auto-generated): 23 URLs - har build se pehle scripts/generate-sitemap.mjs khud update karta hai
-- scripts/generate-sitemap.mjs (NEW): sitemap generator
-- package.json: "prebuild" script add (build se pehle sitemap banta hai)
-- public/robots.txt: Sitemap directive add
-- index.html: lovable.dev/@Lovable branding hatayi, apni domain lagayi
-- src/constants/index.ts: SITE_URL + DEFAULT_OG_IMAGE add
-- src/components/SEO.tsx: har page par automatic canonical URL + og:url + default brand image
-- src/pages/Category.tsx, Index.tsx: schema me window.location ki jagah SITE_URL
+KYA HOTA HAI:
+- npm run build ab 3 step chalata hai: client build -> SSR bundle -> prerender
+- dist/ me har page ka static HTML banta hai (27 pages: home, shop, search, cart, wishlist, auth, checkout, 4 categories, 16 products)
+- Crawlers ko bina JS ke poora content + sahi title/meta/canonical/JSON-LD milta hai
+- Browser me site pehle jaisi hi SPA ki tarah chalti hai
 
-NOTE: Ye site abhi bhi client-side rendered (React SPA) hai - Google to JS chala ke parh lega,
-lekin best SEO ke liye aagay chal kar prerendering/SSR lagana parega. Wo ek alag bara kaam hai.
+NOTE: dist/ deploy karo (Netlify/Vercel waghera par). Agar host par "SPA fallback / rewrite" laga ho to /admin jaise routes bhi kaam karenge.

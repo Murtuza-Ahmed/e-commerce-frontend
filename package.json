@@ -10,7 +10,10 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/generate-sitemap.mjs",
-    "build": "vite build",
+    "build:client": "vite build",
+    "build:ssr": "vite build --ssr src/prerender-entry.tsx --outDir dist-ssr",
+    "prerender": "node scripts/prerender.mjs",
+    "build": "npm run build:client && npm run build:ssr && npm run prerender",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
