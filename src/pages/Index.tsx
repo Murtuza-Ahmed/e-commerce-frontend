@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { products, categories } from "@/data/products";
 import { ProductCard } from "@/components/product/ProductCard";
 import { SEO } from "@/components/SEO";
+import { SITE_URL } from "@/constants";
 
 const Index = () => {
   const newArrivals = products.filter((p) => p.isNew);
@@ -18,10 +19,10 @@ const Index = () => {
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "Al-ucaaz",
-          url: window.location.origin,
+          url: SITE_URL,
           potentialAction: {
             "@type": "SearchAction",
-            target: `${window.location.origin}/search?q={search_term_string}`,
+            target: `${SITE_URL}/search?q={search_term_string}`,
             "query-input": "required name=search_term_string",
           },
         }}

@@ -3,6 +3,7 @@ import { products, categories } from "@/data/products";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ChevronRight } from "lucide-react";
 import { SEO } from "@/components/SEO";
+import { SITE_URL } from "@/constants";
 
 const Category = () => {
   const { slug } = useParams();
@@ -23,8 +24,8 @@ const Category = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: window.location.origin },
-      { "@type": "ListItem", position: 2, name: category.name, item: `${window.location.origin}/category/${category.slug}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: category.name, item: `${SITE_URL}/category/${category.slug}` },
     ],
   };
 

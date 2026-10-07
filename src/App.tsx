@@ -24,6 +24,7 @@ const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const AdminProducts = lazy(() => import("./pages/admin/AdminProducts"));
 const AdminOrders = lazy(() => import("./pages/admin/AdminOrders"));
+const AdminPlaceholder = lazy(() => import("./pages/admin/AdminPlaceholder"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient({
@@ -73,6 +74,11 @@ const App = () => (
                   <Route index element={<AdminDashboard />} />
                   <Route path="products" element={<AdminProducts />} />
                   <Route path="orders" element={<AdminOrders />} />
+                  <Route path="customers" element={<AdminPlaceholder />} />
+                  <Route path="coupons" element={<AdminPlaceholder />} />
+                  <Route path="cms" element={<AdminPlaceholder />} />
+                  <Route path="analytics" element={<AdminPlaceholder />} />
+                  <Route path="settings" element={<AdminPlaceholder />} />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />

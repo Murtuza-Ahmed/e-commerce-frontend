@@ -1,11 +1,24 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { products } from "@/data/products";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { Search as SearchIcon, X } from "lucide-react";
 import { SEO } from "@/components/SEO";
 
 const Search = () => {
-  const [query, setQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get("q") ?? "");
+
+  // Keep the input in sync when the URL changes (e.g. ?q= from the SEO search action)
+  useEffect(() => {
+    const q = searchParams.get("q") ?? "";
+    setQuery((prev) => (prev === q ? prev : q));
+  }, [searchParams]);
+
+  const handleChange = (value: string) => {
+    setQuery(value);
+    setSearchParams(value ? { q: value } : {}, { replace: true });
+  };
 
   const results = useMemo(() => {
     if (!query.trim()) return [];
@@ -32,7 +45,7 @@ const Search = () => {
           <input
             type="search"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => handleChange(e.target.value)}
             placeholder="Search products..."
             autoFocus
             className="w-full pl-12 pr-12 py-4 bg-background border border-border rounded-sm text-base font-body focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -40,7 +53,7 @@ const Search = () => {
           />
           {query && (
             <button
-              onClick={() => setQuery("")}
+              onClick={() => handleChange("")}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               aria-label="Clear search"
             >
@@ -54,7 +67,7 @@ const Search = () => {
             {suggestions.map((s) => (
               <button
                 key={s}
-                onClick={() => setQuery(s)}
+                onClick={() => handleChange(s)}
                 className="text-xs font-body px-3 py-1.5 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
               >
                 {s}

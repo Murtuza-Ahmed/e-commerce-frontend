@@ -45,20 +45,35 @@ const UserDashboard = () => {
               {[
                 { icon: Package, label: "Orders", active: true },
                 { icon: Heart, label: "Wishlist", href: "/wishlist" },
-                { icon: MapPin, label: "Addresses" },
-                { icon: CreditCard, label: "Payment Methods" },
-              ].map((item) => (
-                <Link
-                  key={item.label}
-                  to={item.href || "#"}
-                  className={`flex items-center gap-3 px-3 py-2.5 text-sm font-body rounded-sm transition-colors ${
-                    item.active ? "bg-background font-medium" : "text-muted-foreground hover:bg-background/50"
-                  }`}
-                >
-                  <item.icon className="w-4 h-4" />
-                  {item.label}
-                </Link>
-              ))}
+                { icon: MapPin, label: "Addresses", disabled: true },
+                { icon: CreditCard, label: "Payment Methods", disabled: true },
+              ].map((item) => {
+                const className = `flex items-center gap-3 px-3 py-2.5 text-sm font-body rounded-sm transition-colors ${
+                  item.active
+                    ? "bg-background font-medium"
+                    : item.disabled
+                    ? "text-muted-foreground/50 cursor-not-allowed"
+                    : "text-muted-foreground hover:bg-background/50"
+                }`;
+                const content = (
+                  <>
+                    <item.icon className="w-4 h-4" />
+                    {item.label}
+                    {item.disabled && (
+                      <span className="ml-auto text-[10px] font-body uppercase tracking-wider">Soon</span>
+                    )}
+                  </>
+                );
+                return item.disabled ? (
+                  <span key={item.label} className={className} aria-disabled="true">
+                    {content}
+                  </span>
+                ) : (
+                  <Link key={item.label} to={item.href || "#"} className={className}>
+                    {content}
+                  </Link>
+                );
+              })}
               <button
                 onClick={() => { logout(); navigate("/"); }}
                 className="flex items-center gap-3 px-3 py-2.5 text-sm font-body text-destructive hover:bg-destructive/5 rounded-sm w-full transition-colors"

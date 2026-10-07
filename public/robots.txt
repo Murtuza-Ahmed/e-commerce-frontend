@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://al-ucaaz.vercel.app/sitemap.xml
