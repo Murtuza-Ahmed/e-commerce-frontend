@@ -8,6 +8,8 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Layout } from "@/components/layout/Layout";
 import { lazy, Suspense } from "react";
 import { ProductGridSkeleton } from "@/components/ui/skeleton-loader";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 // Lazy-loaded routes for code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -52,6 +54,8 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
+          <Analytics />
+          <SpeedInsights />
           <BrowserRouter>
             <Suspense fallback={<PageLoader />}>
               <Routes>
