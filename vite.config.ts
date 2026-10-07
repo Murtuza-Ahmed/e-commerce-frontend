@@ -18,4 +18,8 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  ssr: {
+    // Prerender bundle me CJS deps ko bhi bundle karo taake node me named imports chalen
+    noExternal: ["react-helmet-async"],
+  },
 }));
