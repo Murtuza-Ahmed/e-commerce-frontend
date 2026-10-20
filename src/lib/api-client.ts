@@ -1,19 +1,19 @@
 /**
- * Typed HTTP client for the backend API (NestJS + PostgreSQL — jab ready ho).
+ * Typed HTTP client for the Al-ucaaz backend API (NestJS).
  *
- * - Base URL `VITE_API_URL` env var se aata hai (e.g. https://api.al-ucaaz.com/api)
- * - `VITE_USE_API=true` hone par hi API calls hoti hain, warna src/api/* local data deta hai
- * - JSON errors ko ApiError me wrap karta hai taake UI me sahi message dikhe
+ * - Base URL `VITE_API_URL` se aata hai (e.g. http://localhost:3000/api)
+ * - Har authenticated request me Bearer token lagta hai
+ * - 401 par access token ko `/auth/refresh` se renew karke request
+ *   ek dafa retry hoti hai; refresh fail ho to user logout ho jata hai
+ * - JSON errors `ApiError` me wrap hote hain (status + backend message)
  */
 
 function getApiBaseUrl(): string {
-  // Har call par parho taake env change (tests, HMR) sahi reflect ho —
-  // Vite build me import.meta.env waise bhi static inline ho jata hai.
   return ((import.meta.env.VITE_API_URL as string | undefined) ?? "").replace(/\/$/, "");
 }
 
 export function isApiEnabled(): boolean {
-  return (import.meta.env.VITE_USE_API as string | undefined) === "true" && getApiBaseUrl().length > 0;
+  return getApiBaseUrl().length > 0;
 }
 
 export function getApiUrl(): string {
@@ -37,9 +37,24 @@ export class ApiError extends Error {
 export interface RequestOptions extends Omit<RequestInit, "body" | "headers"> {
   body?: unknown;
   headers?: Record<string, string>;
-  /** Bearer token — auth store se aayega jab backend lagega */
-  token?: string;
+  /** Agar false ho to token nahi lagega (public endpoints) */
+  auth?: boolean;
   timeoutMs?: number;
+  /** Internal: 401-retry me dobara refresh na ho */
+  _retried?: boolean;
+}
+
+interface AuthHooks {
+  getAccessToken: () => string | null;
+  refreshAccessToken: () => Promise<string | null>;
+  onAuthExpired: () => void;
+}
+
+let hooks: AuthHooks | null = null;
+
+/** Auth store se ek dafa call hota hai (circular import se bachne ke liye). */
+export function configureApiClient(h: AuthHooks): void {
+  hooks = h;
 }
 
 function parseBody(text: string): unknown {
@@ -51,28 +66,48 @@ function parseBody(text: string): unknown {
   }
 }
 
+/** Ye paths khud auth ke hain — in par 401-retry ka koi faida nahi. */
+function isAuthPath(path: string): boolean {
+  return (
+    path.startsWith("/auth/login") ||
+    path.startsWith("/auth/refresh") ||
+    path.startsWith("/auth/signup")
+  );
+}
+
 async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { body, token, timeoutMs = 15000, headers, ...init } = options;
+  const { body, headers, auth = true, timeoutMs = 15000, _retried = false, ...init } = options;
   const apiUrl = getApiBaseUrl();
 
   if (!apiUrl) {
-    throw new ApiError(0, "VITE_API_URL set nahi hai");
+    throw new ApiError(0, "Backend connect nahi hai — VITE_API_URL set karen");
   }
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
+    const token = auth && hooks ? hooks.getAccessToken() : null;
     const res = await fetch(`${apiUrl}${path}`, {
       ...init,
       signal: controller.signal,
       headers: {
-        "Content-Type": "application/json",
+        ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...headers,
       },
       body: body !== undefined ? JSON.stringify(body) : undefined,
     });
+
+    // 401 → token renew karke ek dafa retry
+    if (res.status === 401 && auth && !_retried && !isAuthPath(path) && hooks) {
+      const newToken = await hooks.refreshAccessToken().catch(() => null);
+      if (newToken) {
+        return request<T>(path, { ...options, _retried: true });
+      }
+      hooks.onAuthExpired();
+      throw new ApiError(401, "Session khatam ho gaya — dobara login karen");
+    }
 
     const data = parseBody(await res.text());
 
@@ -93,6 +128,25 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   } finally {
     clearTimeout(timer);
   }
+}
+
+/** Multipart upload ke liye — JSON Content-Type nahi lagta. */
+export async function uploadFile<T>(path: string, form: FormData): Promise<T> {
+  const apiUrl = getApiBaseUrl();
+  if (!apiUrl) throw new ApiError(0, "Backend connect nahi hai — VITE_API_URL set karen");
+  const token = hooks?.getAccessToken();
+  const res = await fetch(`${apiUrl}${path}`, {
+    method: "POST",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: form,
+  });
+  const data = parseBody(await res.text());
+  if (!res.ok) {
+    const payload = (data ?? {}) as { message?: unknown };
+    const raw = payload.message ?? res.statusText;
+    throw new ApiError(res.status, Array.isArray(raw) ? raw.join(", ") : String(raw), undefined, data);
+  }
+  return data as T;
 }
 
 export const api = {

@@ -1,64 +1,61 @@
 /**
- * Auth API — login, register, session.
- *
- * Backend (NestJS) ke liye tayyar endpoints:
- *   POST /auth/login   { email, password } -> { user, accessToken }
- *   POST /auth/register { name, email, password } -> { user, accessToken }
- *   GET  /auth/me      (Bearer token) -> User
- *   POST /auth/logout  (Bearer token)
- *
- * Abhi local dummy mode me hai (wahi behavior jo store/auth.ts me hai).
- * Backend lagne par sirf VITE_USE_API=true + VITE_API_URL set karna hai —
- * phir token ko store/auth.ts me save karke har request me bhejna hai.
+ * Auth API — backend ke `/api/auth/*` endpoints.
+ * Har function seedha backend se baat karta hai; token ka intezam
+ * `lib/api-client` + `store/auth` karte hain.
  */
-import { api, isApiEnabled } from "@/lib/api-client";
-import type { User } from "@/types";
+import { api } from "@/lib/api-client";
+import type { AuthResponse, User } from "@/types";
 
-export interface AuthResponse {
-  user: User;
-  accessToken: string;
+export type OtpPurpose = "email_verification" | "password_reset" | "email_recovery" | "email_change";
+
+export async function signup(input: { name: string; email: string; password: string; phone?: string }) {
+  return api.post<{ message: string; userId: string }>("/auth/signup", { body: input, auth: false });
 }
 
-function dummyUser(email: string, name?: string): User {
-  return {
-    id: "1",
-    name: name ?? email.split("@")[0],
-    email,
-    role: email.includes("admin") ? "admin" : "customer",
-  };
+export async function verifyEmail(input: { email: string; otp: string }): Promise<AuthResponse> {
+  return api.post<AuthResponse>("/auth/verify-email", { body: input, auth: false });
 }
 
-export async function login(email: string, password: string): Promise<AuthResponse> {
-  if (!isApiEnabled()) {
-    return { user: dummyUser(email), accessToken: "local-dummy-token" };
-  }
-  return api.post<AuthResponse>("/auth/login", { body: { email, password } });
+export async function resendOtp(input: { email: string; purpose: OtpPurpose }) {
+  return api.post<{ message: string }>("/auth/resend-otp", { body: input, auth: false });
 }
 
-export async function register(name: string, email: string, password: string): Promise<AuthResponse> {
-  if (!isApiEnabled()) {
-    return {
-      user: { ...dummyUser(email, name), id: Date.now().toString() },
-      accessToken: "local-dummy-token",
-    };
-  }
-  return api.post<AuthResponse>("/auth/register", { body: { name, email, password } });
+export async function login(input: { email: string; password: string }): Promise<AuthResponse> {
+  return api.post<AuthResponse>("/auth/login", { body: input, auth: false });
 }
 
-export async function getMe(token: string): Promise<User | null> {
-  if (!isApiEnabled()) return null;
+export async function refresh(refreshToken: string): Promise<AuthResponse> {
+  return api.post<AuthResponse>("/auth/refresh", { body: { refreshToken }, auth: false });
+}
+
+export async function logout(): Promise<void> {
   try {
-    return await api.get<User>("/auth/me", { token });
-  } catch {
-    return null;
-  }
-}
-
-export async function logout(token: string): Promise<void> {
-  if (!isApiEnabled()) return;
-  try {
-    await api.post<void>("/auth/logout", { token });
+    await api.post<void>("/auth/logout", {});
   } catch {
     // logout hamesha local state bhi clear karega — error ignore
   }
+}
+
+export async function forgotPassword(email: string) {
+  return api.post<{ message: string }>("/auth/forgot-password", { body: { email }, auth: false });
+}
+
+export async function resetPassword(input: { email: string; otp: string; newPassword: string }) {
+  return api.post<{ message: string }>("/auth/reset-password", { body: input, auth: false });
+}
+
+export async function forgotEmail(phone: string) {
+  return api.post<{ message: string }>("/auth/forgot-email", { body: { phone }, auth: false });
+}
+
+export async function recoverEmail(input: { phone: string; otp: string }): Promise<{ email: string }> {
+  return api.post<{ email: string }>("/auth/recover-email", { body: input, auth: false });
+}
+
+export async function requestEmailChange(newEmail: string) {
+  return api.post<{ message: string }>("/auth/change-email/request", { body: { newEmail } });
+}
+
+export async function confirmEmailChange(input: { newEmail: string; otp: string }): Promise<{ user: User }> {
+  return api.post<{ user: User }>("/auth/change-email/confirm", { body: input });
 }

@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { api, ApiError, isApiEnabled } from "@/lib/api-client";
-import { getProducts } from "@/api/catalog";
-import { products as localProducts } from "@/data/products";
+import { api, ApiError, isApiEnabled, configureApiClient } from "@/lib/api-client";
 
 function mockFetch(response: { ok: boolean; status: number; statusText?: string; body: string }) {
   return vi.fn().mockResolvedValue({
@@ -15,7 +13,11 @@ function mockFetch(response: { ok: boolean; status: number; statusText?: string;
 describe("api-client", () => {
   beforeEach(() => {
     vi.stubEnv("VITE_API_URL", "https://api.example.com/api");
-    vi.stubEnv("VITE_USE_API", "true");
+    configureApiClient({
+      getAccessToken: () => null,
+      refreshAccessToken: async () => null,
+      onAuthExpired: () => {},
+    });
   });
 
   afterEach(() => {
@@ -27,19 +29,24 @@ describe("api-client", () => {
     const fetchMock = mockFetch({ ok: true, status: 200, body: '{"hello":"world"}' });
     vi.stubGlobal("fetch", fetchMock);
 
-    const data = await api.get<{ hello: string }>("/products");
+    const data = await api.get<{ hello: string }>("/users/me");
     expect(data).toEqual({ hello: "world" });
     expect(fetchMock).toHaveBeenCalledWith(
-      "https://api.example.com/api/products",
+      "https://api.example.com/api/users/me",
       expect.objectContaining({ method: "GET" })
     );
   });
 
-  it("Bearer token header bhejta hai", async () => {
+  it("Bearer token header bhejta hai (auth store se)", async () => {
     const fetchMock = mockFetch({ ok: true, status: 200, body: "{}" });
     vi.stubGlobal("fetch", fetchMock);
+    configureApiClient({
+      getAccessToken: () => "abc123",
+      refreshAccessToken: async () => null,
+      onAuthExpired: () => {},
+    });
 
-    await api.get("/auth/me", { token: "abc123" });
+    await api.get("/users/me");
     expect(fetchMock).toHaveBeenCalledWith(
       expect.any(String),
       expect.objectContaining({
@@ -48,47 +55,84 @@ describe("api-client", () => {
     );
   });
 
+  it("auth:false par token nahi bhejta", async () => {
+    const fetchMock = mockFetch({ ok: true, status: 200, body: "{}" });
+    vi.stubGlobal("fetch", fetchMock);
+    configureApiClient({
+      getAccessToken: () => "abc123",
+      refreshAccessToken: async () => null,
+      onAuthExpired: () => {},
+    });
+
+    await api.post("/auth/login", { body: { a: 1 }, auth: false });
+    const headers = fetchMock.mock.calls[0][1].headers as Record<string, string>;
+    expect(headers.Authorization).toBeUndefined();
+  });
+
+  it("401 par token refresh karke retry karta hai", async () => {
+    const first = { ok: false, status: 401, body: '{"message":"Unauthorized"}' };
+    const second = { ok: true, status: 200, body: '{"ok":true}' };
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ...first, statusText: "", text: () => Promise.resolve(first.body) })
+      .mockResolvedValueOnce({ ...second, statusText: "", text: () => Promise.resolve(second.body) });
+    vi.stubGlobal("fetch", fetchMock);
+
+    let refreshed = false;
+    configureApiClient({
+      getAccessToken: () => (refreshed ? "new-token" : "old-token"),
+      refreshAccessToken: async () => {
+        refreshed = true;
+        return "new-token";
+      },
+      onAuthExpired: () => {},
+    });
+
+    const data = await api.get<{ ok: boolean }>("/users/me");
+    expect(data).toEqual({ ok: true });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    const retryHeaders = fetchMock.mock.calls[1][1].headers as Record<string, string>;
+    expect(retryHeaders.Authorization).toBe("Bearer new-token");
+  });
+
+  it("refresh fail ho to onAuthExpired chalta hai", async () => {
+    vi.stubGlobal("fetch", mockFetch({ ok: false, status: 401, body: '{"message":"Unauthorized"}' }));
+    const onAuthExpired = vi.fn();
+    configureApiClient({
+      getAccessToken: () => "old-token",
+      refreshAccessToken: async () => null,
+      onAuthExpired,
+    });
+
+    await expect(api.get("/users/me")).rejects.toMatchObject({ name: "ApiError", status: 401 });
+    expect(onAuthExpired).toHaveBeenCalled();
+  });
+
   it("HTTP error par ApiError throw karta hai (status + message ke saath)", async () => {
     vi.stubGlobal(
       "fetch",
-      mockFetch({ ok: false, status: 404, statusText: "Not Found", body: '{"message":"Product nahi mila"}' })
+      mockFetch({ ok: false, status: 404, statusText: "Not Found", body: '{"message":"Nahi mila"}' })
     );
 
-    await expect(api.get("/products/nope")).rejects.toMatchObject({
+    await expect(api.get("/users/nope")).rejects.toMatchObject({
       name: "ApiError",
       status: 404,
-      message: "Product nahi mila",
+      message: "Nahi mila",
     } satisfies Partial<ApiError>);
   });
 
   it("network failure par status 0 wala ApiError deta hai", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("fetch failed")));
 
-    await expect(api.get("/products")).rejects.toMatchObject({
+    await expect(api.get("/users/me")).rejects.toMatchObject({
       name: "ApiError",
       status: 0,
     } satisfies Partial<ApiError>);
   });
 
-  it("isApiEnabled env ke hisaab se kaam karta hai", () => {
+  it("isApiEnabled URL ke hisaab se kaam karta hai", () => {
     expect(isApiEnabled()).toBe(true);
-    vi.stubEnv("VITE_USE_API", "false");
+    vi.stubEnv("VITE_API_URL", "");
     expect(isApiEnabled()).toBe(false);
-  });
-});
-
-describe("catalog fallback", () => {
-  afterEach(() => {
-    vi.unstubAllEnvs();
-  });
-
-  it("VITE_USE_API=false par local data deta hai (bina fetch ke)", async () => {
-    vi.stubEnv("VITE_USE_API", "false");
-    const fetchMock = vi.fn();
-    vi.stubGlobal("fetch", fetchMock);
-
-    const result = await getProducts();
-    expect(result).toBe(localProducts);
-    expect(fetchMock).not.toHaveBeenCalled();
   });
 });
