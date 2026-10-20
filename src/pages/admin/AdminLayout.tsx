@@ -1,19 +1,35 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { BarChart3, Package, ShoppingCart, Users, Tag, FileText, Settings, ArrowLeft, LayoutDashboard } from "lucide-react";
+import { BarChart3, Package, ShoppingCart, Users, Tag, FileText, Settings, ArrowLeft, LayoutDashboard, Shield, ScrollText } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { useAuthStore, isSuperAdmin } from "@/store/auth";
 
-const adminNav = [
+interface NavItem {
+  icon: LucideIcon;
+  label: string;
+  href: string;
+  superAdmin?: boolean;
+}
+
+const adminNav: NavItem[] = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
   { icon: Package, label: "Products", href: "/admin/products" },
   { icon: ShoppingCart, label: "Orders", href: "/admin/orders" },
-  { icon: Users, label: "Customers", href: "/admin/customers" },
+  { icon: Users, label: "Users", href: "/admin/users" },
   { icon: Tag, label: "Coupons", href: "/admin/coupons" },
   { icon: FileText, label: "CMS", href: "/admin/cms" },
   { icon: BarChart3, label: "Analytics", href: "/admin/analytics" },
   { icon: Settings, label: "Settings", href: "/admin/settings" },
+  { icon: Shield, label: "Roles", href: "/admin/roles", superAdmin: true },
+  { icon: ScrollText, label: "Audit Logs", href: "/admin/audit-logs", superAdmin: true },
 ];
+
+const mobileLabels = ["Dashboard", "Products", "Orders", "Users", "Coupons", "Roles", "Audit Logs"];
 
 const AdminLayout = () => {
   const location = useLocation();
+  const user = useAuthStore((s) => s.user);
+  const nav = adminNav.filter((item) => !item.superAdmin || isSuperAdmin(user));
+  const mobileNav = nav.filter((item) => mobileLabels.includes(item.label));
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -29,7 +45,7 @@ const AdminLayout = () => {
             <p className="text-[10px] font-body text-background/40 tracking-wider uppercase mt-0.5">Admin Panel</p>
           </div>
           <nav className="px-3 space-y-0.5">
-            {adminNav.map((item) => {
+            {nav.map((item) => {
               const active = location.pathname === item.href;
               return (
                 <Link
@@ -54,14 +70,14 @@ const AdminLayout = () => {
         </div>
 
         {/* Mobile bottom nav */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-foreground text-background z-50 flex justify-around py-2">
-          {adminNav.slice(0, 5).map((item) => {
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-foreground text-background z-50 flex justify-around py-2 overflow-x-auto">
+          {mobileNav.map((item) => {
             const active = location.pathname === item.href;
             return (
               <Link
                 key={item.href}
                 to={item.href}
-                className={`flex flex-col items-center gap-0.5 px-2 py-1 text-[10px] font-body ${
+                className={`flex flex-col items-center gap-0.5 px-2 py-1 text-[10px] font-body shrink-0 ${
                   active ? "text-primary" : "text-background/50"
                 }`}
               >

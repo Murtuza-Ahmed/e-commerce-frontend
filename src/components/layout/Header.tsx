@@ -3,7 +3,6 @@ import { ShoppingBag, Heart, Search, Menu, X, User } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
 import { useAuthStore } from "@/store/auth";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -61,7 +60,6 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-1 md:gap-2">
-            <ThemeToggle />
             <Link to="/search" aria-label="Search" className="p-2 hover:text-primary transition-colors">
               <Search className="w-5 h-5" />
             </Link>
