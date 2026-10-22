@@ -9,11 +9,13 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { toast } from "sonner";
 import { SEO } from "@/components/SEO";
 import { formatPrice, discountPercent } from "@/lib/format";
+import { useRequireAuth } from "@/hooks/use-require-auth";
 
 const ProductDetail = () => {
   const { slug } = useParams();
   const product = products.find((p) => p.slug === slug);
   const addItem = useCartStore((s) => s.addItem);
+  const { requireAuth } = useRequireAuth();
   const { isInWishlist, toggleItem } = useWishlistStore();
 
   const [selectedImage, setSelectedImage] = useState(0);
@@ -52,6 +54,12 @@ const ProductDetail = () => {
     }
     if (colors.length && !selectedColor) {
       toast.error("Please select a color");
+      return;
+    }
+    // Cart me add sirf logged-in user ke liye — guest pehle login kare,
+    // login ke baad yehi item khud cart me add ho jayega (Auth page par)
+    if (!requireAuth({ slug: product.slug, variantId: selectedVariant.id, quantity })) {
+      toast.info("Please login first — the item will be added to your cart after login");
       return;
     }
     addItem(product, selectedVariant, quantity);

@@ -104,7 +104,11 @@ const AdminRoles = () => {
     if (!selected) return;
     setSaving(true);
     try {
-      const updated = await setRolePermissions(selected.id, [...checked]);
+      // Backend permission NAMES mangta hai — checked ids ko keys (names) me badlo
+      const keys = [...checked]
+        .map((pid) => permissions.find((p) => p.id === pid)?.key)
+        .filter((k): k is string => !!k);
+      const updated = await setRolePermissions(selected.id, keys);
       setRoles((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
       toast.success(`"${updated.name}" ki permissions save ho gayin`);
     } catch (e) {

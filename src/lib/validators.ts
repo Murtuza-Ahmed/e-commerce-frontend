@@ -41,7 +41,11 @@ export const forgotPasswordSchema = z.object({
 export const resetPasswordSchema = z.object({
   email: z.string().trim().email("Please enter a valid email address").max(255),
   otp: z.string().trim().length(6, "OTP must be 6 digits").regex(/^\d{6}$/, "OTP must be 6 digits"),
-newPassword: z.string().min(8, "Password must be at least 8 characters").max(72),
+  newPassword: z.string().min(8, "Password must be at least 8 characters").max(72),
+  confirmPassword: z.string().min(1, "Please confirm your password"),
+}).refine((d) => d.newPassword === d.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
 });
 
 export const changePasswordSchema = z.object({

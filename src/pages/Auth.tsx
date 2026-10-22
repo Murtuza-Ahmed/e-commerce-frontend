@@ -7,6 +7,9 @@ import { SEO } from "@/components/SEO";
 import { FormField } from "@/components/ui/FormField";
 import { ApiError, isApiEnabled } from "@/lib/api-client";
 import * as authApi from "@/api/auth";
+import { products } from "@/data/products";
+import { useCartStore } from "@/store/cart";
+import type { PendingCartItem } from "@/hooks/use-require-auth";
 import {
   loginSchema,
   registerSchema,
@@ -80,6 +83,17 @@ const Auth = () => {
   const afterLogin = () => {
     const u = useAuthStore.getState().user;
     toast.success("Welcome back!");
+    // Guest ne login se pehle cart me add karne ki koshish ki thi —
+    // pending item ab cart me daal do, phir user wapas wahin jayega
+    const pending = (location.state as { pendingCart?: PendingCartItem } | null)?.pendingCart;
+    if (pending) {
+      const p = products.find((x) => x.slug === pending.slug);
+      const v = p?.variants.find((x) => x.id === pending.variantId) ?? p?.variants[0];
+      if (p && v) {
+        useCartStore.getState().addItem(p, v, pending.quantity);
+        toast.success(`${p.name} added to cart`);
+      }
+    }
     navigate(isStaff(u) ? "/admin" : from, { replace: true });
   };
 
