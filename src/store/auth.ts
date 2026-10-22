@@ -10,7 +10,7 @@ import { persist } from "zustand/middleware";
 import { configureApiClient } from "@/lib/api-client";
 import * as authApi from "@/api/auth";
 import { getMe } from "@/api/users";
-import type { User } from "@/types";
+import type { AuthResponse, User } from "@/types";
 
 interface AuthState {
   user: User | null;
@@ -31,7 +31,32 @@ interface AuthState {
   clearAuth: () => void;
 }
 
-let refreshInFlight: Promise<string | null> | null = null;
+/**
+ * Refresh ki EK hi HTTP call — boot restore (initialize) aur 401-retry
+ * (refreshAccessToken) dono yahi use karte hain.
+ * Wajah: refresh token har dafa ROTATE hota hai; do parallel calls me
+ * dusri wali purane token ke sath jati hai — backend use "token reuse"
+ * samajh kar poora session khatam kar deta hai (mismatch warning).
+ */
+let refreshInFlight: Promise<AuthResponse | null> | null = null;
+
+function sharedRefresh(): Promise<AuthResponse | null> {
+  if (refreshInFlight) return refreshInFlight;
+  refreshInFlight = (async () => {
+    const rt = loadRefreshToken();
+    if (!rt) return null;
+    try {
+      const res = await authApi.refresh(rt);
+      persistRefreshToken(res.refreshToken);
+      return res;
+    } catch {
+      return null;
+    } finally {
+      refreshInFlight = null;
+    }
+  })();
+  return refreshInFlight;
+}
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -77,46 +102,32 @@ export const useAuthStore = create<AuthState>()(
       },
 
       initialize: async () => {
-        const rt = loadRefreshToken();
-        if (!rt) {
+        if (!loadRefreshToken()) {
           set({ isInitialized: true });
           return;
         }
-        try {
-          const res = await authApi.refresh(rt);
-          // pehle token set karo taake getMe() isi se call ho
-          set({ accessToken: res.accessToken, isAuthenticated: true });
-          let user = res.user;
-          try {
-            user = await getMe();
-          } catch {
-            /* fallback: refresh wala user */
-          }
-          set({ user, isInitialized: true });
-          persistRefreshToken(res.refreshToken);
-        } catch {
+        const res = await sharedRefresh();
+        if (!res) {
           clearRefreshToken();
           set({ user: null, accessToken: null, isAuthenticated: false, isInitialized: true });
+          return;
         }
+        // pehle token set karo taake getMe() isi se call ho
+        set({ accessToken: res.accessToken, isAuthenticated: true });
+        let user = res.user;
+        try {
+          user = await getMe();
+        } catch {
+          /* fallback: refresh wala user */
+        }
+        set({ user, isInitialized: true });
       },
 
       refreshAccessToken: async () => {
-        if (refreshInFlight) return refreshInFlight;
-        refreshInFlight = (async () => {
-          const rt = loadRefreshToken();
-          if (!rt) return null;
-          try {
-            const res = await authApi.refresh(rt);
-            set({ accessToken: res.accessToken, user: res.user, isAuthenticated: true });
-            persistRefreshToken(res.refreshToken);
-            return res.accessToken;
-          } catch {
-            return null;
-          } finally {
-            refreshInFlight = null;
-          }
-        })();
-        return refreshInFlight;
+        const res = await sharedRefresh();
+        if (!res) return null;
+        set({ accessToken: res.accessToken, user: res.user, isAuthenticated: true });
+        return res.accessToken;
       },
 
       setUser: (user) => set({ user }),

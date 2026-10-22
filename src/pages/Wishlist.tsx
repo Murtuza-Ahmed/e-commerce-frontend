@@ -6,17 +6,24 @@ import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEO } from "@/components/SEO";
 import { formatPrice } from "@/lib/format";
+import { useRequireAuth } from "@/hooks/use-require-auth";
 
 const Wishlist = () => {
   const { items, removeItem } = useWishlistStore();
   const addToCart = useCartStore((s) => s.addItem);
   const navigate = useNavigate();
+  const { requireAuth } = useRequireAuth();
 
   const handleAddToCart = (item: (typeof items)[number]) => {
     const needsSelection = item.product.variants.some((v) => v.size || v.color);
     if (needsSelection) {
       // Products with size/color options need the user to pick a variant first
       navigate(`/product/${item.product.slug}`);
+      return;
+    }
+    // Cart me add sirf logged-in user ke liye — guest pehle login kare
+    if (!requireAuth({ slug: item.product.slug, variantId: item.product.variants[0].id, quantity: 1 })) {
+      toast.info("Please login first — the item will be added to your cart after login");
       return;
     }
     addToCart(item.product, item.product.variants[0], 1);
