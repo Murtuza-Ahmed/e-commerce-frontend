@@ -130,16 +130,49 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   }
 }
 
-/** Multipart upload ke liye — JSON Content-Type nahi lagta. */
-export async function uploadFile<T>(path: string, form: FormData): Promise<T> {
+/** Multipart upload ke liye — JSON Content-Type nahi lagta.
+ *  request() ki tarah 401 par token renew karke ek dafa retry hota hai. */
+export async function uploadFile<T>(
+  path: string,
+  form: FormData,
+  method: "POST" | "PATCH" = "POST"
+): Promise<T> {
   const apiUrl = getApiBaseUrl();
   if (!apiUrl) throw new ApiError(0, "Backend connect nahi hai — VITE_API_URL set karen");
-  const token = hooks?.getAccessToken();
-  const res = await fetch(`${apiUrl}${path}`, {
-    method: "POST",
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-    body: form,
-  });
+
+  const attempt = async (token: string | null): Promise<Response> => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
+    try {
+      return await fetch(`${apiUrl}${path}`, {
+        method,
+        signal: controller.signal,
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: form,
+      });
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        throw new ApiError(0, "Request timed out — backend jawab nahi de raha");
+      }
+      throw new ApiError(0, "Network error — backend se connect nahi ho saka");
+    } finally {
+      clearTimeout(timer);
+    }
+  };
+
+  let res = await attempt(hooks?.getAccessToken() ?? null);
+
+  // 401 → token renew karke ek dafa retry (request() wala hi rawaj)
+  if (res.status === 401 && hooks && !isAuthPath(path)) {
+    const newToken = await hooks.refreshAccessToken().catch(() => null);
+    if (newToken) {
+      res = await attempt(newToken);
+    } else {
+      hooks.onAuthExpired();
+      throw new ApiError(401, "Session khatam ho gaya — dobara login karen");
+    }
+  }
+
   const data = parseBody(await res.text());
   if (!res.ok) {
     const payload = (data ?? {}) as { message?: unknown };

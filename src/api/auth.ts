@@ -5,15 +5,23 @@
  */
 import { api } from "@/lib/api-client";
 import type { AuthResponse, User } from "@/types";
+import { normalizeUser, type BackendUser } from "./users";
 
 export type OtpPurpose = "email_verification" | "password_reset" | "email_recovery" | "email_change";
+
+/** Backend AuthResponse me user ka role object hota hai — normalize karo. */
+type RawAuthResponse = Omit<AuthResponse, "user"> & { user: BackendUser };
+
+function withNormalizedUser(res: RawAuthResponse): AuthResponse {
+  return { ...res, user: normalizeUser(res.user) };
+}
 
 export async function signup(input: { name: string; email: string; password: string; phone?: string }) {
   return api.post<{ message: string; userId: string }>("/auth/signup", { body: input, auth: false });
 }
 
 export async function verifyEmail(input: { email: string; otp: string }): Promise<AuthResponse> {
-  return api.post<AuthResponse>("/auth/verify-email", { body: input, auth: false });
+  return withNormalizedUser(await api.post<RawAuthResponse>("/auth/verify-email", { body: input, auth: false }));
 }
 
 export async function resendOtp(input: { email: string; purpose: OtpPurpose }) {
@@ -21,11 +29,11 @@ export async function resendOtp(input: { email: string; purpose: OtpPurpose }) {
 }
 
 export async function login(input: { email: string; password: string }): Promise<AuthResponse> {
-  return api.post<AuthResponse>("/auth/login", { body: input, auth: false });
+  return withNormalizedUser(await api.post<RawAuthResponse>("/auth/login", { body: input, auth: false }));
 }
 
 export async function refresh(refreshToken: string): Promise<AuthResponse> {
-  return api.post<AuthResponse>("/auth/refresh", { body: { refreshToken }, auth: false });
+  return withNormalizedUser(await api.post<RawAuthResponse>("/auth/refresh", { body: { refreshToken }, auth: false }));
 }
 
 export async function logout(): Promise<void> {
@@ -57,5 +65,6 @@ export async function requestEmailChange(newEmail: string) {
 }
 
 export async function confirmEmailChange(input: { newEmail: string; otp: string }): Promise<{ user: User }> {
-  return api.post<{ user: User }>("/auth/change-email/confirm", { body: input });
+  const res = await api.post<{ user: BackendUser }>("/auth/change-email/confirm", { body: input });
+  return { user: normalizeUser(res.user) };
 }
