@@ -35,11 +35,11 @@ const Shop = () => {
 
   return (
     <div className="container py-8 md:py-12">
-      <SEO title="Shop All" description="Browse our complete collection of premium fashion pieces." />
+      <SEO title="Shop All" description="Browse our complete collection of premium night suits & pajama sets." />
 
       <div className="mb-8">
         <p className="text-xs font-body tracking-[0.2em] uppercase text-muted-foreground mb-2">Browse</p>
-        <h1 className="text-3xl md:text-4xl font-display font-bold">All Products</h1>
+        <h1 className="text-3xl md:text-4xl font-display font-bold">All Night Suits</h1>
         <p className="text-sm text-muted-foreground font-body mt-2">{filtered.length} pieces</p>
       </div>
 
@@ -73,7 +73,7 @@ const Shop = () => {
                 }`}
                 aria-pressed={selectedCategory === cat.slug}
               >
-                {cat.name.replace("'s Collection", "")}
+                {cat.shortLabel ?? cat.name}
               </button>
             ))}
           </div>
@@ -135,7 +135,7 @@ const Shop = () => {
                 selectedCategory === cat.slug ? "bg-foreground text-background" : "bg-muted text-muted-foreground"
               }`}
             >
-              {cat.name.replace("'s Collection", "")}
+              {cat.shortLabel ?? cat.name}
             </button>
           ))}
         </div>

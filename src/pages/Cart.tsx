@@ -18,7 +18,7 @@ const Cart = () => {
         <p className="text-sm font-body text-muted-foreground mb-8">Looks like you haven't added anything yet.</p>
         <Link
           to="/shop"
-          className="inline-flex items-center gap-2 bg-foreground text-background px-8 py-3.5 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity"
+          className="btn-primary"
         >
           Continue Shopping
           <ArrowRight className="w-4 h-4" />
@@ -107,7 +107,7 @@ const Cart = () => {
             </div>
             <Link
               to="/checkout"
-              className="block w-full text-center bg-foreground text-background py-3.5 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity mt-6"
+              className="btn-primary w-full mt-6"
             >
               Proceed to Checkout
             </Link>

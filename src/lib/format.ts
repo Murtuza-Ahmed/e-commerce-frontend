@@ -1,13 +1,9 @@
 /**
- * Format a number as USD currency.
+ * Format a number as PKR (Pakistani Rupees).
+ * All store prices are placeholders — confirm with the owner before launch.
  */
 export function formatPrice(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(amount);
+  return `Rs ${new Intl.NumberFormat("en-PK", { maximumFractionDigits: 0 }).format(amount)}`;
 }
 
 /**

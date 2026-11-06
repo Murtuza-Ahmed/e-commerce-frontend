@@ -33,11 +33,11 @@ const Search = () => {
     );
   }, [query]);
 
-  const suggestions = ["Wool", "Silk", "Leather", "Cashmere", "Linen"];
+  const suggestions = ["Pajama", "Cotton Jersey", "Satin", "Couple", "Faith"];
 
   return (
     <div className="container py-8 md:py-12">
-      <SEO title="Search" description="Search our premium fashion collection." />
+      <SEO title="Search" description="Search our night suits & pajama sets." />
 
       <div className="max-w-2xl mx-auto mb-12">
         <div className="relative">

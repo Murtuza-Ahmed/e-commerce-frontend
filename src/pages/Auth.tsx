@@ -327,7 +327,7 @@ const Auth = () => {
           {errors.form && <p className="text-sm text-destructive font-body">{errors.form}</p>}
 
           <button type="submit" disabled={busy}
-            className="w-full bg-foreground text-background py-3.5 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity disabled:opacity-50">
+            className="btn-primary w-full">
             {busy ? "Please wait…" : submitLabel[step]}
           </button>
         </form>

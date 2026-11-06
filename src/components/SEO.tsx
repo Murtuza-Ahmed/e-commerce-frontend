@@ -10,10 +10,10 @@ interface SEOProps {
   schema?: Record<string, unknown>;
 }
 
-const DEFAULT_DESC = "Premium curated fashion — luxury clothing, accessories & footwear for the modern connoisseur.";
+const DEFAULT_DESC = "Premium night suits & pajama sets from Al-ucaaz — soft cotton jersey, relaxed fits, sizes S–XXL.";
 
 export function SEO({ title, description = DEFAULT_DESC, image, url, type = "website", schema }: SEOProps) {
-  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Premium Fashion`;
+  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Premium Night Suits`;
   // Har page ko automatic canonical + og:url milta hai (duplicate-content se bachao).
   // SSR/prerender me window nahi hota, wahan prerender-entry path set karta hai.
   const pagePath =

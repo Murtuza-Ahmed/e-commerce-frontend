@@ -28,6 +28,19 @@ export interface Product {
   isNew?: boolean;
   isSale?: boolean;
   isFlashSale?: boolean;
+  /** Card/gallery crop hint for wide (detail-card) photos, e.g. model on the right. */
+  imageFocus?: "center" | "right";
+  /** Per-image fit for the detail gallery: detail cards read better with "contain". */
+  imagesFit?: ("cover" | "contain")[];
+  /** Free delivery promo (stated on the product photo). */
+  freeDelivery?: boolean;
+  /** Only filled in where the product's detail card states fabric/fit/contents. */
+  details?: {
+    fabric?: string;
+    fit?: string;
+    includes?: string[];
+    care?: string[];
+  };
   status: 'active' | 'draft' | 'scheduled';
   createdAt: string;
 }
@@ -120,6 +133,7 @@ export interface Category {
   id: string;
   name: string;
   slug: string;
+  shortLabel?: string;
   image: string;
   description: string;
   productCount: number;

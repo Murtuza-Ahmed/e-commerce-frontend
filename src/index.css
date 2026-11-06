@@ -5,59 +5,15 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+   * SINGLE THEME — Dark + Gold (Phase 0.3, 2026-11-07).
+   * The light tokens were removed: the site rendered light by default while
+   * the dark theme was defined but never activated (no `dark` class anywhere),
+   * so the two themes split the site (light pages + dark hero). Dark + Gold is
+   * now the only theme. If john ever prefers light, restore the old :root
+   * values from git history — nothing else needs to change.
+   */
   :root {
-    --background: 40 25% 97%;
-    --foreground: 30 10% 8%;
-
-    --card: 40 20% 99%;
-    --card-foreground: 30 10% 8%;
-
-    --popover: 40 20% 99%;
-    --popover-foreground: 30 10% 8%;
-
-    --primary: 32 90% 50%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 35 15% 92%;
-    --secondary-foreground: 30 10% 15%;
-
-    --muted: 35 12% 93%;
-    --muted-foreground: 30 8% 45%;
-
-    --accent: 25 75% 52%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 35 18% 88%;
-    --input: 35 18% 88%;
-    --ring: 32 90% 50%;
-
-    --radius: 0.375rem;
-
-    --sidebar-background: 30 10% 6%;
-    --sidebar-foreground: 40 15% 90%;
-    --sidebar-primary: 32 90% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 30 10% 12%;
-    --sidebar-accent-foreground: 40 15% 90%;
-    --sidebar-border: 30 10% 15%;
-    --sidebar-ring: 32 90% 50%;
-
-    /* Custom tokens */
-    --hero-gradient: linear-gradient(135deg, hsl(30 10% 8%) 0%, hsl(30 15% 18%) 100%);
-    --gold-shimmer: linear-gradient(90deg, hsl(32 90% 50%), hsl(40 95% 60%), hsl(32 90% 50%));
-    --surface-elevated: 40 20% 100%;
-    --badge-sale: 0 72% 51%;
-    --badge-new: 160 70% 40%;
-    --success: 160 70% 40%;
-    --success-foreground: 0 0% 100%;
-    --warning: 40 95% 55%;
-    --warning-foreground: 30 10% 8%;
-  }
-
-  .dark {
     --background: 30 10% 6%;
     --foreground: 40 15% 92%;
 
@@ -86,14 +42,8 @@
     --input: 30 8% 18%;
     --ring: 32 90% 50%;
 
-    --success: 160 65% 45%;
-    --success-foreground: 0 0% 100%;
-    --warning: 40 95% 60%;
-    --warning-foreground: 30 10% 8%;
-    --badge-sale: 0 62% 45%;
-    --badge-new: 160 65% 45%;
+    --radius: 0.375rem;
 
-    --surface-elevated: 30 10% 12%;
     --sidebar-background: 30 10% 4%;
     --sidebar-foreground: 40 15% 90%;
     --sidebar-primary: 32 90% 50%;
@@ -102,6 +52,17 @@
     --sidebar-accent-foreground: 40 15% 90%;
     --sidebar-border: 30 10% 12%;
     --sidebar-ring: 32 90% 50%;
+
+    /* Custom tokens */
+    --hero-gradient: linear-gradient(135deg, hsl(30 10% 8%) 0%, hsl(30 15% 18%) 100%);
+    --gold-shimmer: linear-gradient(90deg, hsl(32 90% 50%), hsl(40 95% 60%), hsl(32 90% 50%));
+    --surface-elevated: 30 10% 12%;
+    --badge-sale: 0 62% 45%;
+    --badge-new: 160 65% 45%;
+    --success: 160 65% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 40 95% 60%;
+    --warning-foreground: 30 10% 8%;
   }
 }
 
@@ -117,6 +78,30 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', Georgia, serif;
+  }
+}
+
+/*
+ * Buttons — Design System (Phase 0.3). One rule for every button on the site:
+ * 15px / 600, radius 6px, uppercase tracking. Primary is gold; hover is
+ * darker gold #D97706; disabled is 50% opacity. Use these classes instead of
+ * hand-rolling bg-foreground/text-background buttons.
+ */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-3.5 text-[15px] font-body font-semibold tracking-wider uppercase rounded-md transition-colors hover:bg-[#D97706] disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 bg-transparent text-primary border border-primary/60 px-8 py-3.5 text-[15px] font-body font-semibold tracking-wider uppercase rounded-md transition-colors hover:bg-primary/10 disabled:opacity-50;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 bg-transparent text-muted-foreground px-8 py-3.5 text-[15px] font-body font-semibold tracking-wider uppercase rounded-md transition-colors hover:bg-muted hover:text-foreground disabled:opacity-50;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 bg-destructive text-destructive-foreground px-8 py-3.5 text-[15px] font-body font-semibold tracking-wider uppercase rounded-md transition-colors hover:opacity-90 disabled:opacity-50;
   }
 }
 
@@ -173,4 +158,13 @@
 
 .animate-slide-up {
   animation: slide-up 0.6s ease-out forwards;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
 }

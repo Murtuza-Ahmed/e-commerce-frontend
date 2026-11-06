@@ -53,7 +53,7 @@ const Checkout = () => {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             to="/shop"
-            className="bg-foreground text-background px-8 py-3.5 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity"
+            className="btn-primary"
           >
             Continue Shopping
           </Link>
@@ -186,7 +186,9 @@ const Checkout = () => {
             <div className="border-t border-border pt-3 space-y-2 text-sm font-body">
               <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatPrice(subtotal)}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Shipping</span><span>{shipping === 0 ? "Free" : formatPrice(shipping)}</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Tax</span><span>{formatPrice(tax)}</span></div>
+              {tax > 0 && (
+                <div className="flex justify-between"><span className="text-muted-foreground">Tax</span><span>{formatPrice(tax)}</span></div>
+              )}
               <div className="border-t border-border pt-2 flex justify-between font-semibold">
                 <span>Total</span><span className="text-lg">{formatPrice(total)}</span>
               </div>
@@ -194,7 +196,7 @@ const Checkout = () => {
             <button
               onClick={handlePlaceOrder}
               disabled={placing}
-              className="w-full bg-foreground text-background py-3.5 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity mt-6 disabled:opacity-50"
+              className="btn-primary w-full mt-6"
             >
               {placing ? "Processing..." : "Place Order"}
             </button>

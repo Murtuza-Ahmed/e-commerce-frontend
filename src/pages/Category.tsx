@@ -40,16 +40,16 @@ const Category = () => {
 
       <div className="relative h-48 md:h-64 overflow-hidden">
         <img src={category.image} alt={category.name} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-foreground/50" />
+        <div className="absolute inset-0 bg-background/60" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">
-            <nav className="flex items-center gap-2 text-xs font-body text-background/70 mb-3" aria-label="Breadcrumb">
-              <Link to="/" className="hover:text-background transition-colors">Home</Link>
+            <nav className="flex items-center gap-2 text-xs font-body text-foreground/70 mb-3" aria-label="Breadcrumb">
+              <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
               <ChevronRight className="w-3 h-3" />
-              <span className="text-background">{category.name}</span>
+              <span className="text-foreground">{category.name}</span>
             </nav>
-            <h1 className="text-3xl md:text-4xl font-display font-bold text-background">{category.name}</h1>
-            <p className="text-sm font-body text-background/70 mt-2">{category.description}</p>
+            <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">{category.name}</h1>
+            <p className="text-sm font-body text-foreground/70 mt-2">{category.description}</p>
           </div>
         </div>
       </div>

@@ -22,6 +22,25 @@ export default {
         display: ["'Playfair Display'", "Georgia", "serif"],
         body: ["'DM Sans'", "system-ui", "sans-serif"],
       },
+      // Type scale — Design System (Phase 0.3). H1 40px (32px mobile) / 700,
+      // H2 32px / 600, H3 24px / 600, body 16px / 400, small 14px / 500,
+      // caption 12px / 400, button 15px / 600, price 18px / 700.
+      fontSize: {
+        "display-1": ["2.5rem", { lineHeight: "3rem", fontWeight: "700" }],
+        "display-2": ["2rem", { lineHeight: "2.5rem", fontWeight: "600" }],
+        "display-3": ["1.5rem", { lineHeight: "2rem", fontWeight: "600" }],
+        body: ["1rem", { lineHeight: "1.5rem", fontWeight: "400" }],
+        small: ["0.875rem", { lineHeight: "1.25rem", fontWeight: "500" }],
+        caption: ["0.75rem", { lineHeight: "1rem", fontWeight: "400" }],
+        button: ["0.9375rem", { lineHeight: "1.25rem", fontWeight: "600" }],
+        price: ["1.125rem", { lineHeight: "1.5rem", fontWeight: "700" }],
+      },
+      // Shadows — Design System (Phase 0.3).
+      boxShadow: {
+        card: "0 1px 3px rgba(0, 0, 0, 0.12)",
+        elevated: "0 8px 24px rgba(0, 0, 0, 0.18)",
+        hero: "0 24px 48px rgba(0, 0, 0, 0.35)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -76,9 +95,10 @@ export default {
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        sm: "4px",
+        md: "6px",
+        lg: "12px",
+        xl: "16px",
       },
       keyframes: {
         "accordion-down": {

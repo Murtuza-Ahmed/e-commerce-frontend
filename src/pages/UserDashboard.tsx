@@ -258,7 +258,7 @@ const UserDashboard = () => {
                   <button
                     type="submit"
                     disabled={busy}
-                    className="bg-foreground text-background px-6 py-3 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+                    className="btn-primary"
                   >
                     {busy ? "Saving…" : "Save Changes"}
                   </button>
@@ -282,7 +282,7 @@ const UserDashboard = () => {
                   <button
                     type="submit"
                     disabled={busy}
-                    className="bg-foreground text-background px-6 py-3 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+                    className="btn-primary"
                   >
                     {busy ? "Saving…" : "Change Password"}
                   </button>
@@ -303,7 +303,7 @@ const UserDashboard = () => {
                     <button
                       type="submit"
                       disabled={busy}
-                      className="bg-foreground text-background px-6 py-3 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+                      className="btn-primary"
                     >
                       {busy ? "Sending…" : "Send OTP"}
                     </button>
@@ -320,7 +320,7 @@ const UserDashboard = () => {
                       <button
                         type="submit"
                         disabled={busy}
-                        className="bg-foreground text-background px-6 py-3 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+                        className="btn-primary"
                       >
                         {busy ? "Verifying…" : "Confirm Change"}
                       </button>

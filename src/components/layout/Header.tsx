@@ -5,13 +5,14 @@ import { useWishlistStore } from "@/store/wishlist";
 import { useAuthStore } from "@/store/auth";
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { CartDrawer } from "./CartDrawer";
+import { formatPrice } from "@/lib/format";
+import { FREE_SHIPPING_THRESHOLD } from "@/constants";
 
 const navLinks = [
   { label: "Shop", href: "/shop" },
-  { label: "Men", href: "/category/mens" },
   { label: "Women", href: "/category/womens" },
-  { label: "Accessories", href: "/category/accessories" },
-  { label: "Footwear", href: "/category/footwear" },
+  { label: "Couple Sets", href: "/category/couple" },
 ];
 
 export function Header() {
@@ -19,6 +20,7 @@ export function Header() {
   const wishlistCount = useWishlistStore((s) => s.items.length);
   const { isAuthenticated, user } = useAuthStore();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
@@ -26,8 +28,8 @@ export function Header() {
     <>
       <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
         {/* Top bar */}
-        <div className="bg-foreground text-background text-xs text-center py-1.5 font-body tracking-wider">
-          FREE SHIPPING ON ORDERS OVER $250 — CODE: <span className="font-semibold">FREESHIP</span>
+        <div className="bg-primary text-primary-foreground text-xs text-center py-1.5 font-body tracking-wider">
+          FREE DELIVERY ALL OVER PAKISTAN ON ORDERS OVER {formatPrice(FREE_SHIPPING_THRESHOLD)}
         </div>
 
         <div className="container flex items-center justify-between h-16 md:h-20">
@@ -71,14 +73,18 @@ export function Header() {
                 </span>
               )}
             </Link>
-            <Link to="/cart" aria-label="Cart" className="p-2 hover:text-primary transition-colors relative">
+            <button
+              onClick={() => setCartOpen(true)}
+              aria-label="Cart"
+              className="p-2 hover:text-primary transition-colors relative"
+            >
               <ShoppingBag className="w-5 h-5" />
               {totalItems > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 bg-primary text-primary-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
-            </Link>
+            </button>
             <Link
               to={isAuthenticated ? "/dashboard" : "/auth"}
               aria-label="Account"
@@ -89,6 +95,8 @@ export function Header() {
           </div>
         </div>
       </header>
+
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
 
       {/* Mobile menu */}
       <AnimatePresence>
