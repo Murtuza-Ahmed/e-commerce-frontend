@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { useState, useMemo, memo } from "react";
+import { useState } from "react";
 import { products } from "@/data/products";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
@@ -30,8 +30,11 @@ const ProductDetail = () => {
     return (
       <div className="container py-20 text-center">
         <SEO title="Product Not Found" />
-        <h1 className="text-2xl font-display font-bold mb-4">Product not found</h1>
-        <Link to="/shop" className="text-sm font-body text-primary hover:underline">Back to Shop</Link>
+        <h1 className="text-display-3 mb-4">Product not found</h1>
+        <p className="text-sm font-body text-muted-foreground mb-8">
+          This piece doesn&apos;t exist or has been moved.
+        </p>
+        <Link to="/shop" className="btn-primary">Back to Shop</Link>
       </div>
     );
   }
@@ -109,7 +112,7 @@ const ProductDetail = () => {
 
       {/* Breadcrumb */}
       <nav className="container py-4" aria-label="Breadcrumb">
-        <ol className="flex items-center gap-2 text-xs font-body text-muted-foreground">
+        <ol className="flex items-center gap-2 text-xs font-body text-muted-foreground flex-wrap">
           <li><Link to="/" className="hover:text-foreground transition-colors">Home</Link></li>
           <li><ChevronRight className="w-3 h-3" /></li>
           <li><Link to="/shop" className="hover:text-foreground transition-colors">Shop</Link></li>
@@ -124,7 +127,7 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
           {/* Images */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-            <div className="aspect-[3/4] overflow-hidden rounded-sm bg-muted mb-3">
+            <div className="aspect-[3/4] overflow-hidden rounded-sm bg-muted shadow-card mb-3">
               <img
                 src={product.images[selectedImage]}
                 alt={product.name}
@@ -140,7 +143,7 @@ const ProductDetail = () => {
                     role="tab"
                     aria-selected={i === selectedImage}
                     className={`w-20 h-24 overflow-hidden rounded-sm border-2 transition-colors ${
-                      i === selectedImage ? "border-primary" : "border-transparent"
+                      i === selectedImage ? "border-primary" : "border-transparent hover:border-border"
                     }`}
                   >
                     <img
@@ -161,8 +164,8 @@ const ProductDetail = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex flex-col"
           >
-            <p className="text-xs font-body tracking-[0.2em] uppercase text-muted-foreground mb-2">{product.brand}</p>
-            <h1 className="text-2xl md:text-3xl font-display font-bold mb-3">{product.name}</h1>
+            <p className="eyebrow mb-2">{product.brand}</p>
+            <h1 className="font-display font-semibold text-display-3 md:text-display-2 mb-3">{product.name}</h1>
 
             {/* Rating — hidden until real reviews exist (all products are 0/0) */}
             {product.reviewCount > 0 && (
@@ -182,7 +185,7 @@ const ProductDetail = () => {
             )}
 
             {/* Price */}
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-6 flex-wrap">
               <span className="text-2xl font-body font-bold">{formatPrice(selectedVariant.price)}</span>
               {selectedVariant.compareAtPrice && (
                 <>
@@ -194,11 +197,11 @@ const ProductDetail = () => {
               )}
             </div>
 
-            <p className="text-sm font-body text-muted-foreground leading-relaxed mb-6">{product.description}</p>
+            <p className="text-body text-muted-foreground leading-relaxed mb-6">{product.description}</p>
 
             {/* Fabric / fit details — only where the product's detail card states them */}
             {product.details && (
-              <dl className="text-sm font-body space-y-2 mb-6 border border-border rounded-sm p-4 bg-muted/30">
+              <dl className="text-sm font-body space-y-2 mb-6 border border-border rounded-md p-5 bg-card shadow-card">
                 {product.details.fabric && (
                   <div className="flex gap-3">
                     <dt className="font-semibold w-20 shrink-0">Fabric</dt>
@@ -237,7 +240,7 @@ const ProductDetail = () => {
                     <button
                       key={c.name}
                       onClick={() => setSelectedColor(c.name)}
-                      className={`w-8 h-8 rounded-full border-2 transition-all ${
+                      className={`w-10 h-10 rounded-full border-2 transition-all ${
                         selectedColor === c.name ? "border-primary ring-2 ring-primary/30" : "border-border"
                       }`}
                       style={{ backgroundColor: c.hex }}
@@ -256,7 +259,7 @@ const ProductDetail = () => {
                   <legend className="text-xs font-body font-semibold tracking-wide uppercase">Size</legend>
                   <button
                     onClick={() => setSizeGuideOpen(true)}
-                    className="text-xs font-body text-primary underline underline-offset-2"
+                    className="min-h-10 px-2 text-xs font-body text-primary underline underline-offset-2"
                   >
                     Size Guide
                   </button>
@@ -273,7 +276,7 @@ const ProductDetail = () => {
                         onClick={() => !outOfStock && setSelectedSize(size)}
                         disabled={outOfStock}
                         aria-pressed={selectedSize === size}
-                        className={`min-w-[3rem] px-4 py-2.5 text-xs font-body font-medium border rounded-sm transition-all ${
+                        className={`min-w-12 min-h-11 px-4 py-3 text-xs font-body font-medium border rounded-sm transition-all ${
                           selectedSize === size
                             ? "border-foreground bg-foreground text-background"
                             : outOfStock
@@ -290,11 +293,11 @@ const ProductDetail = () => {
             )}
 
             {/* Quantity + Add to cart */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="flex items-center border border-border rounded-sm">
+            <div className="flex items-center gap-3 md:gap-4 mb-6">
+              <div className="flex items-center border border-border rounded-sm bg-card">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-3 py-2.5 hover:bg-muted transition-colors"
+                  className="min-w-11 min-h-11 px-3 py-3 hover:bg-muted transition-colors"
                   aria-label="Decrease quantity"
                 >
                   <Minus className="w-4 h-4" />
@@ -302,7 +305,7 @@ const ProductDetail = () => {
                 <span className="px-4 py-2.5 text-sm font-body font-medium min-w-[2.5rem] text-center" aria-live="polite">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="px-3 py-2.5 hover:bg-muted transition-colors"
+                  className="min-w-11 min-h-11 px-3 py-3 hover:bg-muted transition-colors"
                   aria-label="Increase quantity"
                 >
                   <Plus className="w-4 h-4" />
@@ -316,8 +319,8 @@ const ProductDetail = () => {
               </button>
               <button
                 onClick={() => toggleItem(product)}
-                className={`p-3.5 border rounded-sm transition-colors ${
-                  wishlisted ? "border-primary bg-primary/5" : "border-border hover:border-foreground"
+                className={`min-w-11 min-h-11 p-3.5 border rounded-sm transition-colors ${
+                  wishlisted ? "border-primary bg-primary/5" : "border-border bg-card hover:border-foreground"
                 }`}
                 aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
               >
@@ -328,13 +331,22 @@ const ProductDetail = () => {
             {/* Trust badges */}
             <div className="border-t border-border pt-6 space-y-3">
               <div className="flex items-center gap-3 text-xs font-body text-muted-foreground">
-                <Truck className="w-4 h-4 flex-shrink-0" /> Free delivery on orders over {formatPrice(FREE_SHIPPING_THRESHOLD)}
+                <span className="w-8 h-8 rounded-full bg-forest-mist flex items-center justify-center shrink-0">
+                  <Truck className="w-4 h-4 text-primary" />
+                </span>
+                Free delivery on orders over {formatPrice(FREE_SHIPPING_THRESHOLD)}
               </div>
               <div className="flex items-center gap-3 text-xs font-body text-muted-foreground">
-                <RotateCcw className="w-4 h-4 flex-shrink-0" /> 30-day return policy
+                <span className="w-8 h-8 rounded-full bg-forest-mist flex items-center justify-center shrink-0">
+                  <RotateCcw className="w-4 h-4 text-primary" />
+                </span>
+                30-day return policy
               </div>
               <div className="flex items-center gap-3 text-xs font-body text-muted-foreground">
-                <Shield className="w-4 h-4 flex-shrink-0" /> Authenticity guaranteed
+                <span className="w-8 h-8 rounded-full bg-forest-mist flex items-center justify-center shrink-0">
+                  <Shield className="w-4 h-4 text-primary" />
+                </span>
+                Authenticity guaranteed
               </div>
             </div>
 
@@ -347,7 +359,7 @@ const ProductDetail = () => {
         {/* Related */}
         {related.length > 0 && (
           <div className="mt-20">
-            <h2 className="text-2xl font-display font-bold mb-8">You May Also Like</h2>
+            <h2 className="section-title mb-8">You May Also Like</h2>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {related.map((p, i) => (
                 <ProductCard key={p.id} product={p} index={i} />

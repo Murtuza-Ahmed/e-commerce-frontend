@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { products, categories } from "@/data/products";
 import { ProductGrid } from "@/components/product/ProductGrid";
-import { SlidersHorizontal, Grid3X3, Grid2X2, ChevronDown } from "lucide-react";
+import { SlidersHorizontal, Grid3X3, Grid2X2, ChevronDown, ChevronRight, SearchX } from "lucide-react";
 import { SEO } from "@/components/SEO";
 
 type SortOption = "newest" | "price-asc" | "price-desc" | "rating";
@@ -37,10 +38,17 @@ const Shop = () => {
     <div className="container py-8 md:py-12">
       <SEO title="Shop All" description="Browse our complete collection of premium night suits & pajama sets." />
 
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-2 text-xs font-body text-muted-foreground mb-6" aria-label="Breadcrumb">
+        <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+        <ChevronRight className="w-3 h-3" />
+        <span className="text-foreground" aria-current="page">Shop</span>
+      </nav>
+
       <div className="mb-8">
-        <p className="text-xs font-body tracking-[0.2em] uppercase text-muted-foreground mb-2">Browse</p>
-        <h1 className="text-3xl md:text-4xl font-display font-bold">All Night Suits</h1>
-        <p className="text-sm text-muted-foreground font-body mt-2">{filtered.length} pieces</p>
+        <p className="eyebrow mb-2">Browse the collection</p>
+        <h1 className="text-display-2">All Night Suits</h1>
+        <p className="text-small text-muted-foreground mt-2">{filtered.length} piece{filtered.length === 1 ? "" : "s"}</p>
       </div>
 
       {/* Toolbar */}
@@ -48,7 +56,7 @@ const Shop = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 text-sm font-body font-medium px-4 py-2 border border-border rounded-sm hover:bg-muted transition-colors"
+            className="min-h-10 flex items-center gap-2 text-sm font-body font-medium px-4 py-2 border border-border rounded-sm bg-card hover:bg-muted transition-colors"
             aria-expanded={showFilters}
           >
             <SlidersHorizontal className="w-4 h-4" />
@@ -57,8 +65,8 @@ const Shop = () => {
           <div className="hidden md:flex items-center gap-2" role="group" aria-label="Category filters">
             <button
               onClick={() => setSelectedCategory("all")}
-              className={`text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
-                selectedCategory === "all" ? "bg-foreground text-background" : "bg-muted text-muted-foreground hover:bg-muted/80"
+              className={`min-h-10 text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
+                selectedCategory === "all" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
               }`}
               aria-pressed={selectedCategory === "all"}
             >
@@ -68,8 +76,8 @@ const Shop = () => {
               <button
                 key={cat.slug}
                 onClick={() => setSelectedCategory(cat.slug)}
-                className={`text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
-                  selectedCategory === cat.slug ? "bg-foreground text-background" : "bg-muted text-muted-foreground hover:bg-muted/80"
+                className={`min-h-10 text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
+                  selectedCategory === cat.slug ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
                 }`}
                 aria-pressed={selectedCategory === cat.slug}
               >
@@ -86,7 +94,7 @@ const Shop = () => {
               id="sort-select"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="appearance-none text-xs font-body font-medium pl-3 pr-8 py-2 border border-border rounded-sm bg-background cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30"
+              className="appearance-none min-h-10 text-xs font-body font-medium pl-3 pr-8 py-2 border border-border rounded-sm bg-card cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30"
             >
               <option value="newest">Newest</option>
               <option value="price-asc">Price: Low to High</option>
@@ -95,10 +103,10 @@ const Shop = () => {
             </select>
             <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
           </div>
-          <div className="hidden md:flex items-center border border-border rounded-sm overflow-hidden" role="group" aria-label="Grid layout">
+          <div className="hidden md:flex items-center border border-border rounded-sm overflow-hidden bg-card" role="group" aria-label="Grid layout">
             <button
               onClick={() => setColumns(3)}
-              className={`p-2 ${columns === 3 ? "bg-muted" : "hover:bg-muted/50"}`}
+              className={`min-w-10 min-h-10 flex items-center justify-center p-2.5 ${columns === 3 ? "bg-muted" : "hover:bg-muted/50"}`}
               aria-label="3 columns"
               aria-pressed={columns === 3}
             >
@@ -106,7 +114,7 @@ const Shop = () => {
             </button>
             <button
               onClick={() => setColumns(4)}
-              className={`p-2 ${columns === 4 ? "bg-muted" : "hover:bg-muted/50"}`}
+              className={`min-w-10 min-h-10 flex items-center justify-center p-2.5 ${columns === 4 ? "bg-muted" : "hover:bg-muted/50"}`}
               aria-label="4 columns"
               aria-pressed={columns === 4}
             >
@@ -121,8 +129,8 @@ const Shop = () => {
         <div className="md:hidden flex flex-wrap gap-2 mb-6" role="group" aria-label="Category filters">
           <button
             onClick={() => setSelectedCategory("all")}
-            className={`text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
-              selectedCategory === "all" ? "bg-foreground text-background" : "bg-muted text-muted-foreground"
+            className={`min-h-10 text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
+              selectedCategory === "all" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
             }`}
           >
             All
@@ -131,8 +139,8 @@ const Shop = () => {
             <button
               key={cat.slug}
               onClick={() => setSelectedCategory(cat.slug)}
-              className={`text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
-                selectedCategory === cat.slug ? "bg-foreground text-background" : "bg-muted text-muted-foreground"
+              className={`min-h-10 text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
+                selectedCategory === cat.slug ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
               }`}
             >
               {cat.shortLabel ?? cat.name}
@@ -141,7 +149,22 @@ const Shop = () => {
         </div>
       )}
 
-      <ProductGrid products={filtered} columns={columns} />
+      {filtered.length > 0 ? (
+        <ProductGrid products={filtered} columns={columns} />
+      ) : (
+        <div className="text-center py-16 md:py-24 bg-card border border-border rounded-md shadow-card">
+          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-forest-mist flex items-center justify-center">
+            <SearchX className="w-8 h-8 text-primary" />
+          </div>
+          <h2 className="font-display font-semibold text-display-4 mb-2">No pieces found</h2>
+          <p className="text-sm font-body text-muted-foreground mb-8">
+            Try a different category or clear the filters to see the full collection.
+          </p>
+          <button onClick={() => setSelectedCategory("all")} className="btn-primary">
+            Clear Filters
+          </button>
+        </div>
+      )}
     </div>
   );
 };

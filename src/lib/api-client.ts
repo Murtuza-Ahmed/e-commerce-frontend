@@ -80,7 +80,10 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   const apiUrl = getApiBaseUrl();
 
   if (!apiUrl) {
-    throw new ApiError(0, "Backend connect nahi hai — VITE_API_URL set karen");
+    // Customer-facing message only; the missing VITE_API_URL detail stays
+    // in the console (Phase 1 audit L-5).
+    console.error("[api] Request failed: API is not configured (VITE_API_URL is missing)");
+    throw new ApiError(0, "Service is unavailable right now — please try again later");
   }
 
   const controller = new AbortController();
@@ -138,7 +141,10 @@ export async function uploadFile<T>(
   method: "POST" | "PATCH" = "POST"
 ): Promise<T> {
   const apiUrl = getApiBaseUrl();
-  if (!apiUrl) throw new ApiError(0, "Backend connect nahi hai — VITE_API_URL set karen");
+  if (!apiUrl) {
+    console.error("[api] Upload failed: API is not configured (VITE_API_URL is missing)");
+    throw new ApiError(0, "Upload is unavailable right now — please try again later");
+  }
 
   const attempt = async (token: string | null): Promise<Response> => {
     const controller = new AbortController();

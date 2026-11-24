@@ -27,6 +27,19 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
     : 0;
   const sizes = Array.from(new Set(product.variants.filter((v) => v.size).map((v) => v.size!)));
 
+  // Badges — at most two on the photo; free delivery moved to the price row below.
+  const badges: { label: string; className: string }[] = [];
+  if (product.isNew) {
+    badges.push({ label: "New", className: "bg-success text-success-foreground" });
+  }
+  if (product.isSale && discount > 0) {
+    badges.push({ label: `-${discount}%`, className: "bg-destructive text-destructive-foreground" });
+  }
+  if (product.isFlashSale) {
+    badges.push({ label: "Flash Sale", className: "bg-primary text-primary-foreground" });
+  }
+  const visibleBadges = badges.slice(0, 2);
+
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -59,7 +72,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         className="group"
       >
         <Link to={`/product/${product.slug}`} className="block">
-          <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-muted">
+          <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-muted shadow-card transition-shadow duration-300 group-hover:shadow-elevated">
             <img
               src={product.images[0]}
               alt={product.name}
@@ -67,28 +80,22 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
               style={{ objectPosition: product.imageFocus === "right" ? "80% center" : "center" }}
               loading="lazy"
             />
-            {/* Badges — at most two on the photo; free delivery moved to the price row below */}
-            <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start">
-              {product.isNew && (
-                <span className="bg-success text-success-foreground text-[10px] font-body font-bold tracking-wider uppercase px-2.5 py-1 rounded-sm">
-                  New
-                </span>
-              )}
-              {product.isSale && discount > 0 && (
-                <span className="bg-destructive text-destructive-foreground text-[10px] font-body font-bold tracking-wider uppercase px-2.5 py-1 rounded-sm">
-                  -{discount}%
-                </span>
-              )}
-              {product.isFlashSale && (
-                <span className="bg-primary text-primary-foreground text-[10px] font-body font-bold tracking-wider uppercase px-2.5 py-1 rounded-sm">
-                  Flash Sale
-                </span>
-              )}
-            </div>
+            {visibleBadges.length > 0 && (
+              <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start">
+                {visibleBadges.map((badge) => (
+                  <span
+                    key={badge.label}
+                    className={`${badge.className} text-[10px] font-body font-bold tracking-wider uppercase px-2.5 py-1 rounded-sm`}
+                  >
+                    {badge.label}
+                  </span>
+                ))}
+              </div>
+            )}
             {/* Wishlist */}
             <button
               onClick={handleWishlist}
-              className="absolute top-3 right-3 p-2 bg-background/80 backdrop-blur-sm rounded-full hover:bg-background transition-colors"
+              className="absolute top-3 right-3 w-10 h-10 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full shadow-card hover:bg-background transition-colors"
               aria-label="Toggle wishlist"
             >
               <Heart
@@ -110,14 +117,17 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         <div className="mt-3 space-y-1">
           <p className="text-xs text-muted-foreground font-body tracking-wide uppercase">{product.brand}</p>
           <Link to={`/product/${product.slug}`}>
-            <h3 className="font-body font-medium text-sm leading-snug hover:text-primary transition-colors">
+            <h3 className="font-display font-semibold text-base leading-snug hover:text-primary transition-colors">
               {product.name}
             </h3>
           </Link>
-          <div className="flex items-center gap-2">
-            <span className="font-body font-semibold text-sm">{formatPrice(product.basePrice)}</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-price">{formatPrice(product.basePrice)}</span>
             {product.compareAtPrice && (
               <span className="text-muted-foreground text-xs line-through">{formatPrice(product.compareAtPrice)}</span>
+            )}
+            {discount > 0 && (
+              <span className="text-xs font-body font-semibold text-destructive">-{discount}%</span>
             )}
             {product.freeDelivery && (
               <span className="ml-auto flex items-center gap-1 text-[11px] font-body font-medium text-primary">
@@ -134,7 +144,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                     key={size}
                     type="button"
                     onClick={() => handleQuickAdd(size)}
-                    className="min-w-9 px-2.5 py-1.5 text-xs font-body font-semibold border border-border rounded-sm hover:border-foreground hover:bg-foreground hover:text-background transition-colors"
+                    className="min-w-10 min-h-10 px-2.5 py-2 text-xs font-body font-semibold border border-border rounded-sm hover:border-foreground hover:bg-foreground hover:text-background transition-colors"
                   >
                     {size}
                   </button>
@@ -142,7 +152,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                 <button
                   type="button"
                   onClick={() => setShowSizes(false)}
-                  className="px-2.5 py-1.5 text-xs font-body text-muted-foreground hover:text-foreground transition-colors"
+                  className="min-w-10 min-h-10 px-2.5 py-2 text-xs font-body text-muted-foreground hover:text-foreground transition-colors"
                   aria-label="Close size picker"
                 >
                   ✕
@@ -152,7 +162,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
               <button
                 type="button"
                 onClick={() => setShowSizes(true)}
-                className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-body font-semibold tracking-wider uppercase border border-border rounded-sm hover:bg-foreground hover:text-background transition-colors"
+                className="w-full min-h-11 flex items-center justify-center gap-2 py-3 text-xs font-body font-semibold tracking-wider uppercase border border-border rounded-sm hover:bg-foreground hover:text-background transition-colors"
               >
                 <ShoppingBag className="w-3.5 h-3.5" /> Add to Cart
               </button>

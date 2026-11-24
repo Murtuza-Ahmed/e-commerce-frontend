@@ -65,15 +65,15 @@ function Modal({
       onClick={onClose}
     >
       <div
-        className="bg-background border border-border rounded-sm w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"
+        className="bg-card border border-border rounded-sm shadow-elevated w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-lg font-bold">{title}</h2>
+          <h2 className="font-display text-display-4 font-semibold">{title}</h2>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="min-h-10 min-w-10 flex items-center justify-center rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -231,16 +231,14 @@ const AdminUsers = () => {
       <SEO title="Admin - Users" />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-display font-bold">Users</h1>
-          <p className="text-sm font-body text-muted-foreground mt-1">
+          <p className="eyebrow mb-2">Admin</p>
+          <h1 className="font-display font-semibold text-display-3 md:text-display-2">Users</h1>
+          <p className="text-small font-body text-muted-foreground mt-2">
             {meta ? `${meta.total} total users` : "Loading users…"}
           </p>
         </div>
-        <button
-          onClick={() => setAddOpen(true)}
-          className="flex items-center gap-2 bg-foreground text-background px-4 py-2.5 text-xs font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity"
-        >
-          <Plus className="w-4 h-4" /> Add User
+        <button onClick={() => setAddOpen(true)} className="btn-primary">
+          <Plus className="w-4 h-4" /> Add user
         </button>
       </div>
 
@@ -251,47 +249,48 @@ const AdminUsers = () => {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search by name or email…"
-          className="w-full pl-9 pr-4 py-2.5 bg-background border border-border rounded-sm text-sm font-body focus:outline-none focus:ring-2 focus:ring-primary/30 transition-colors"
+          aria-label="Search users"
+          className="w-full min-h-11 pl-9 pr-4 py-2.5 bg-card border border-border rounded-sm text-small font-body placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
         />
       </div>
 
       {loading ? (
         <ProductGridSkeleton count={6} />
       ) : users.length === 0 ? (
-        <div className="bg-card border border-border rounded-sm p-12 text-center">
+        <div className="bg-card border border-border rounded-sm shadow-card p-12 text-center">
           <p className="font-body text-muted-foreground">No users found.</p>
         </div>
       ) : (
         <>
           {/* Table */}
-          <div className="bg-card border border-border rounded-sm overflow-hidden">
+          <div className="bg-card border border-border rounded-sm shadow-card overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left text-[10px] font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">User</th>
-                    <th className="text-left text-[10px] font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3 hidden md:table-cell">Role</th>
-                    <th className="text-left text-[10px] font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3 hidden lg:table-cell">Verified</th>
-                    <th className="text-left text-[10px] font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3 hidden lg:table-cell">Joined</th>
-                    <th className="text-left text-[10px] font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">Status</th>
-                    <th className="text-left text-[10px] font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">Actions</th>
+                  <tr className="border-b border-border bg-muted/40">
+                    <th className="text-left text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">User</th>
+                    <th className="text-left text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3 hidden md:table-cell">Role</th>
+                    <th className="text-left text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3 hidden lg:table-cell">Verified</th>
+                    <th className="text-left text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3 hidden lg:table-cell">Joined</th>
+                    <th className="text-left text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">Status</th>
+                    <th className="text-left text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map((u) => (
-                    <tr key={u.id} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
+                    <tr key={u.id} className="border-b border-border last:border-0 hover:bg-muted/40 transition-colors">
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-3">
                           {u.avatarUrl ? (
                             <img src={u.avatarUrl} alt={u.name} className="w-9 h-9 rounded-full object-cover" />
                           ) : (
-                            <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center text-xs font-body font-bold text-muted-foreground shrink-0">
+                            <div className="w-9 h-9 rounded-full bg-forest-mist flex items-center justify-center text-caption font-body font-bold text-primary shrink-0">
                               {initials(u.name)}
                             </div>
                           )}
                           <div className="min-w-0">
-                            <p className="text-sm font-body font-medium truncate">{u.name}</p>
-                            <p className="text-xs font-body text-muted-foreground truncate">{u.email}</p>
+                            <p className="text-small font-body font-medium truncate">{u.name}</p>
+                            <p className="text-caption font-body text-muted-foreground truncate">{u.email}</p>
                           </div>
                         </div>
                       </td>
@@ -301,7 +300,7 @@ const AdminUsers = () => {
                           disabled={busy === u.id}
                           onChange={(e) => changeRole(u, e.target.value as UserRole)}
                           title="Change role"
-                          className={`text-[10px] font-body font-bold tracking-wider uppercase px-2 py-1 rounded-sm cursor-pointer focus:outline-none disabled:opacity-50 ${roleBadge[u.role]}`}
+                          className={`text-caption font-body font-semibold tracking-wider uppercase px-2 py-1.5 rounded-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50 ${roleBadge[u.role]}`}
                         >
                           {ROLES.map((r) => (
                             <option key={r} value={r}>
@@ -312,14 +311,14 @@ const AdminUsers = () => {
                       </td>
                       <td className="px-4 py-3 hidden lg:table-cell">
                         {u.emailVerified ? (
-                          <span className="flex items-center gap-1 text-xs font-body text-success">
+                          <span className="flex items-center gap-1 text-caption font-body text-success">
                             <BadgeCheck className="w-4 h-4" /> Yes
                           </span>
                         ) : (
-                          <span className="text-xs font-body text-muted-foreground">No</span>
+                          <span className="text-caption font-body text-muted-foreground">No</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-xs font-body text-muted-foreground hidden lg:table-cell">
+                      <td className="px-4 py-3 text-caption font-body text-muted-foreground hidden lg:table-cell whitespace-nowrap">
                         {formatDate(u.createdAt)}
                       </td>
                       <td className="px-4 py-3">
@@ -327,7 +326,7 @@ const AdminUsers = () => {
                           onClick={() => toggleActive(u)}
                           disabled={busy === u.id}
                           title={u.isActive ? "Deactivate user" : "Activate user"}
-                          className={`flex items-center gap-1.5 text-[10px] font-body font-bold tracking-wider uppercase px-2 py-1 rounded-sm transition-colors disabled:opacity-50 ${
+                          className={`flex items-center gap-1.5 min-h-10 text-caption font-body font-semibold tracking-wider uppercase px-2 py-1 rounded-sm transition-colors disabled:opacity-50 ${
                             u.isActive
                               ? "bg-success/10 text-success hover:bg-success/20"
                               : "bg-muted text-muted-foreground hover:bg-muted/70"
@@ -345,7 +344,8 @@ const AdminUsers = () => {
                           <button
                             onClick={() => openEdit(u)}
                             title="Edit name / phone"
-                            className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                            aria-label={`Edit ${u.name}`}
+                            className="min-h-10 min-w-10 flex items-center justify-center rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
@@ -353,7 +353,8 @@ const AdminUsers = () => {
                             onClick={() => removeUser(u)}
                             disabled={busy === u.id}
                             title="Delete user"
-                            className="p-2 text-muted-foreground hover:text-destructive transition-colors disabled:opacity-50"
+                            aria-label={`Delete ${u.name}`}
+                            className="min-h-10 min-w-10 flex items-center justify-center rounded-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -367,22 +368,22 @@ const AdminUsers = () => {
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-between mt-6">
-            <p className="text-xs font-body text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-between gap-3 mt-6">
+            <p className="text-caption font-body text-muted-foreground">
               Page {meta?.page ?? page} of {totalPages}
             </p>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page <= 1 || loading}
-                className="flex items-center gap-1 border border-border text-foreground px-3 py-2 text-xs font-body font-semibold rounded-sm hover:bg-muted transition-colors disabled:opacity-40"
+                className="btn-secondary"
               >
                 <ChevronLeft className="w-4 h-4" /> Prev
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page >= totalPages || loading}
-                className="flex items-center gap-1 border border-border text-foreground px-3 py-2 text-xs font-body font-semibold rounded-sm hover:bg-muted transition-colors disabled:opacity-40"
+                className="btn-secondary"
               >
                 Next <ChevronRight className="w-4 h-4" />
               </button>
@@ -400,11 +401,11 @@ const AdminUsers = () => {
             <FormField label="Password" type="password" value={fPassword} onChange={(e) => setFPassword(e.target.value)} required minLength={8} />
             <FormField label="Phone (optional)" type="tel" value={fPhone} onChange={(e) => setFPhone(e.target.value)} />
             <div className="space-y-1.5">
-              <label className="text-xs font-body font-semibold tracking-wide uppercase block">Role</label>
+              <label className="text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground block">Role</label>
               <select
                 value={fRole}
                 onChange={(e) => setFRole(e.target.value as UserRole)}
-                className="w-full px-4 py-3 bg-background border border-border rounded-sm text-sm font-body focus:outline-none focus:ring-2 focus:ring-primary/30 transition-colors"
+                className="w-full min-h-11 px-4 py-3 bg-background border border-border rounded-sm text-small font-body focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
               >
                 {ROLES.map((r) => (
                   <option key={r} value={r}>
@@ -416,9 +417,9 @@ const AdminUsers = () => {
             <button
               type="submit"
               disabled={busy === "add"}
-              className="w-full bg-foreground text-background py-3 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="btn-primary w-full"
             >
-              {busy === "add" ? "Creating…" : "Create User"}
+              {busy === "add" ? "Creating…" : "Create user"}
             </button>
           </form>
         </Modal>
@@ -429,11 +430,11 @@ const AdminUsers = () => {
         <Modal title="Edit User" onClose={() => setEditing(null)}>
           <form onSubmit={submitEdit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-body font-semibold tracking-wide uppercase block">Email</label>
+              <label className="text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground block">Email</label>
               <input
                 value={editing.email}
                 disabled
-                className="w-full px-4 py-3 bg-muted border border-border rounded-sm text-sm font-body text-muted-foreground"
+                className="w-full min-h-11 px-4 py-3 bg-muted border border-border rounded-sm text-small font-body text-muted-foreground"
               />
             </div>
             <FormField label="Full Name" type="text" value={eName} onChange={(e) => setEName(e.target.value)} required />
@@ -441,9 +442,9 @@ const AdminUsers = () => {
             <button
               type="submit"
               disabled={busy === editing.id}
-              className="w-full bg-foreground text-background py-3 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="btn-primary w-full"
             >
-              {busy === editing.id ? "Saving…" : "Save Changes"}
+              {busy === editing.id ? "Saving…" : "Save changes"}
             </button>
           </form>
         </Modal>

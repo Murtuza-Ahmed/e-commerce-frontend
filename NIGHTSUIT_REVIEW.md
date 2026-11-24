@@ -78,3 +78,25 @@ show no fabric claim yet.
 - The new static hero was verified by build + prerender + HTTP smoke test,
   NOT by a visual browser check (no browser here). Please open the home page
   and check the hero looks right on your screen.
+
+---
+
+## Forest & Ivory transformation (2026-11-08) — john's 16-section prompt
+
+The Dark + Gold Phase 0.3 design system in this copy is REPLACED by the
+official Forest & Ivory identity: Forest Green #183D32 + Ivory #F3F0E7.
+- `src/index.css`: all tokens re-mapped to Forest/Ivory HSL; Cormorant
+  Garamond headings (was Playfair Display), DM Sans body kept; buttons now
+  sentence-case 14px/600; gold-shimmer / hero-gradient / marquee removed;
+  `prefers-reduced-motion` respected.
+- `tailwind.config.ts`: type scale per prompt (hero 56–76px desktop,
+  page H1 48px, H2 32px, H3 24px), forest/ivory colors, soft shadows.
+- Homepage, Header, Footer, CartDrawer, SizeGuide, all product components,
+  all storefront pages and the whole admin dashboard redesigned; all logic,
+  routes, stores, auth guards, SEO and prerendering preserved.
+- Prices are still the authorized PLACEHOLDERS (Rs 2,499–3,499); free
+  delivery wording/rules unchanged (undecided); newsletter still local-only.
+- Verification: `npm run lint` 0 errors, `npm run test` 12/12 pass,
+  `npx tsc -b` clean, `npm run build` pass (client + SSR + 19 prerendered
+  routes), HTTP smoke test 8/8 routes 200. NOT verified in a browser:
+  john to open the site and check the visual look.

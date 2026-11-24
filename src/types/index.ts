@@ -32,7 +32,7 @@ export interface Product {
   imageFocus?: "center" | "right";
   /** Per-image fit for the detail gallery: detail cards read better with "contain". */
   imagesFit?: ("cover" | "contain")[];
-  /** Free delivery promo (stated on the product photo). */
+  /** Free delivery promo for this product. */
   freeDelivery?: boolean;
   /** Only filled in where the product's detail card states fabric/fit/contents. */
   details?: {

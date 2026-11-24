@@ -62,13 +62,17 @@ const Auth = () => {
   const from = (location.state as { from?: string } | null)?.from ?? "/";
 
   if (!isApiEnabled()) {
+    // Customer-facing copy only — the technical detail (missing
+    // VITE_API_URL) goes to the console, never to the shopper (Phase 1 L-5).
+    console.error("[auth] Sign-in unavailable: API is not configured (VITE_API_URL is missing)");
     return (
       <div className="min-h-[70vh] flex items-center justify-center py-12 px-6">
         <SEO title="Sign In" description="Sign in to your Al-ucaaz account." />
-        <div className="max-w-md text-center">
-          <h1 className="text-2xl font-display font-bold mb-3">Backend connect nahi hai</h1>
+        <div className="max-w-md w-full text-center bg-card border border-border rounded-md shadow-elevated px-6 py-10">
+          <p className="eyebrow mb-2">Al-ucaaz</p>
+          <h1 className="font-display font-semibold text-display-4 mb-3">Sign-in is unavailable right now</h1>
           <p className="text-sm font-body text-muted-foreground">
-            Auth ke liye backend zaroori hai. <code>VITE_API_URL</code> set karke dobara build karen.
+            Please try again later.
           </p>
         </div>
       </div>
@@ -284,9 +288,13 @@ const Auth = () => {
   return (
     <div className="min-h-[70vh] flex items-center justify-center py-12">
       <SEO title={t.h} description="Sign in or create your Al-ucaaz account." />
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md mx-auto px-6">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md mx-auto px-4">
+        <div className="bg-card border border-border rounded-md shadow-elevated overflow-hidden">
+          <div className="h-1.5 bg-primary" aria-hidden="true" />
+          <div className="px-6 md:px-8 py-8 md:py-10">
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-display font-bold mb-2">{t.h}</h1>
+          <p className="eyebrow mb-2">Al-ucaaz</p>
+          <h1 className="font-display font-semibold text-display-3 mb-2">{t.h}</h1>
           <p className="text-sm font-body text-muted-foreground break-all">{t.p}</p>
         </div>
 
@@ -384,6 +392,8 @@ const Auth = () => {
             </Link>
           </div>
         )}
+          </div>
+        </div>
       </motion.div>
     </div>
   );

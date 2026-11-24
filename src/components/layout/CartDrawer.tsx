@@ -39,7 +39,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-background/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-forest-deep/50 backdrop-blur-sm"
             onClick={onClose}
             aria-hidden="true"
           />
@@ -48,13 +48,17 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3, ease: "easeOut" }}
-            className="absolute right-0 top-0 h-full w-full max-w-md bg-background shadow-2xl flex flex-col"
+            className="absolute right-0 top-0 h-full w-full max-w-md bg-card text-card-foreground shadow-elevated flex flex-col"
           >
-            <div className="flex items-center justify-between p-5 border-b border-border">
-              <h2 className="font-display text-lg font-bold">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+              <h2 className="font-display text-display-4 font-semibold text-primary">
                 Your Cart {totalItems() > 0 && <span className="text-muted-foreground">({totalItems()})</span>}
               </h2>
-              <button onClick={onClose} className="p-2 hover:bg-muted rounded-sm transition-colors" aria-label="Close cart">
+              <button
+                onClick={onClose}
+                className="min-h-10 min-w-10 flex items-center justify-center hover:bg-muted rounded-sm transition-colors"
+                aria-label="Close cart"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -62,24 +66,20 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             {items.length === 0 ? (
               <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
                 <ShoppingBag className="w-14 h-14 text-muted-foreground/30 mb-4" />
-                <p className="font-display font-bold text-lg mb-2">Your cart is empty</p>
-                <p className="text-sm font-body text-muted-foreground mb-6">
+                <p className="font-display font-semibold text-display-4 mb-2">Your cart is empty</p>
+                <p className="text-small font-body text-muted-foreground mb-6">
                   Soft cotton jersey night suits are waiting for you.
                 </p>
-                <Link
-                  to="/shop"
-                  onClick={onClose}
-                  className="btn-primary"
-                >
+                <Link to="/shop" onClick={onClose} className="btn-primary">
                   Shop Night Suits <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             ) : (
               <>
-                {/* Free delivery progress */}
-                <div className="px-5 py-4 border-b border-border">
-                  <p className="flex items-center gap-2 text-xs font-body text-muted-foreground mb-2">
-                    <Truck className="w-4 h-4 text-primary" />
+                {/* Free delivery progress — threshold wording kept as-is */}
+                <div className="px-5 py-4 border-b border-border bg-forest-mist/60">
+                  <p className="flex items-center gap-2 text-small font-body text-muted-foreground mb-2">
+                    <Truck className="w-4 h-4 text-primary shrink-0" />
                     {remaining > 0 ? (
                       <span>
                         Add <span className="font-semibold text-foreground">{formatPrice(remaining)}</span> more for
@@ -89,7 +89,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                       <span className="font-semibold text-primary">You&rsquo;ve unlocked FREE delivery!</span>
                     )}
                   </p>
-                  <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-ivory-deep rounded-full overflow-hidden">
                     <div
                       className="h-full bg-primary rounded-full transition-all duration-500"
                       style={{ width: `${progress}%` }}
@@ -128,25 +128,25 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                           </div>
                           <button
                             onClick={() => removeItem(item.variant.id)}
-                            className="p-1 text-muted-foreground hover:text-destructive transition-colors"
+                            className="min-h-10 min-w-10 flex items-center justify-center -mt-2 -mr-2 text-muted-foreground hover:text-destructive transition-colors"
                             aria-label={`Remove ${item.product.name}`}
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
                         <div className="flex items-center justify-between mt-2">
-                          <div className="flex items-center border border-border rounded-sm">
+                          <div className="flex items-center border border-border rounded-sm bg-background">
                             <button
                               onClick={() => updateQuantity(item.variant.id, item.quantity - 1)}
-                              className="px-2 py-1.5 hover:bg-muted transition-colors"
+                              className="min-h-10 min-w-10 flex items-center justify-center hover:bg-muted transition-colors"
                               aria-label="Decrease"
                             >
                               <Minus className="w-3.5 h-3.5" />
                             </button>
-                            <span className="px-3 py-1.5 text-xs font-body font-medium">{item.quantity}</span>
+                            <span className="px-2 text-small font-body font-medium">{item.quantity}</span>
                             <button
                               onClick={() => updateQuantity(item.variant.id, item.quantity + 1)}
-                              className="px-2 py-1.5 hover:bg-muted transition-colors"
+                              className="min-h-10 min-w-10 flex items-center justify-center hover:bg-muted transition-colors"
                               aria-label="Increase"
                             >
                               <Plus className="w-3.5 h-3.5" />
@@ -161,29 +161,21 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                   ))}
                 </div>
 
-                <div className="border-t border-border p-5 space-y-4">
+                <div className="border-t border-border p-5 space-y-4 bg-ivory-light/60">
                   <div className="flex justify-between text-sm font-body">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span className="font-bold">{formatPrice(subtotal)}</span>
+                    <span className="font-bold text-price">{formatPrice(subtotal)}</span>
                   </div>
-                  <p className="text-xs font-body text-muted-foreground">
+                  <p className="text-caption font-body text-muted-foreground">
                     {remaining > 0
                       ? `Delivery calculated at checkout — free over ${formatPrice(FREE_SHIPPING_THRESHOLD)}.`
                       : "Delivery is FREE on this order."}
                   </p>
                   <div className="grid grid-cols-2 gap-3">
-                    <Link
-                      to="/cart"
-                      onClick={onClose}
-                      className="btn-secondary"
-                    >
+                    <Link to="/cart" onClick={onClose} className="btn-secondary">
                       View Cart
                     </Link>
-                    <Link
-                      to="/checkout"
-                      onClick={onClose}
-                      className="btn-primary"
-                    >
+                    <Link to="/checkout" onClick={onClose} className="btn-primary">
                       Checkout
                     </Link>
                   </div>

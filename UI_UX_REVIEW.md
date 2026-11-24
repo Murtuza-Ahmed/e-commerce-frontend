@@ -171,3 +171,39 @@ said the 3D was not that special). Done in the working copy, build verified
   mobile-menu positioning, checkout/COD flow end-to-end. Those still need
   john (or a browser check) to open the site. The old 3D-hero caveat is
   moot — the 3D hero was removed 2026-11-07.
+
+---
+
+## Forest & Ivory transformation (2026-11-08) — john's 16-section prompt
+
+The Dark + Gold theme is GONE, completely. New official identity: Forest Green
+#183D32 + Ivory #F3F0E7 (HSL tokens in `src/index.css`, `tailwind.config.ts`).
+Fonts: Cormorant Garamond headings, DM Sans body. Full redesign: homepage
+(editorial split hero, static slim announcement bar, collections, featured,
+promo banner, new arrivals, size guide, newsletter), Header/Footer/CartDrawer,
+ProductCard/QuickView, all storefront pages (Shop, Category, ProductDetail,
+Search, Cart, Wishlist, Auth, Checkout, Dashboard, 404) and the whole admin
+(forest sidebar, status badges with text + color).
+
+What this fixed from the parked list above:
+- Hero is now a real editorial split layout (photo 55–60% desktop); the
+  abstract gold wave and the gold-shimmer headline are gone.
+- Happy Sunflower no longer appears 3× on home (Collections promo tile
+  dropped; it stays in the promo banner + New Arrivals).
+- Promo banner redesigned (forest/ivory campaign panel, real prices from
+  data) — no more dark gradient.
+- Footer rebuilt (forest bg, ivory text); dead links stay plain text.
+- Free-delivery progress bars kept; wording/rules UNCHANGED (decision still
+  john's — threshold Rs 2,999 vs "Free Delivery All Pakistan").
+
+Still parked / still john's decisions (unchanged by this transformation):
+- Free delivery: all orders vs only over Rs 2,999.
+- Theme is now DECIDED by john's prompt (Forest & Ivory) — Dark + Gold is
+  removed, not switchable back except from git history.
+- Newsletter is still local-only (localStorage); no backend endpoint.
+- 4 low-res product photos still need originals; fabric details still
+  missing for 7 of 10 sets — nothing invented.
+- Footer About / FAQ / Shipping & Returns pages still don't exist.
+- NOT verified: no browser visual check and no admin click-through were
+  done — build + prerender + HTTP smoke test only. john to open the site
+  and check the look on his screen.

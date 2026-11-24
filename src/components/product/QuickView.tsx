@@ -77,7 +77,7 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
             aria-label={`Quick view: ${product.name}`}
           >
             <div
-              className="absolute inset-0 bg-background/70 backdrop-blur-sm"
+              className="absolute inset-0 bg-forest-deep/60 backdrop-blur-sm"
               onClick={onClose}
               aria-hidden="true"
             />
@@ -86,11 +86,11 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 40, scale: 0.98 }}
               transition={{ duration: 0.25 }}
-              className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-background rounded-t-lg sm:rounded-sm shadow-2xl"
+              className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-card border border-border rounded-t-md sm:rounded-md shadow-elevated"
             >
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-10 p-2 bg-background/90 hover:bg-muted rounded-full transition-colors"
+                className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-background/90 hover:bg-muted rounded-full shadow-card transition-colors"
                 aria-label="Close quick view"
               >
                 <X className="w-5 h-5" />
@@ -106,14 +106,14 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
                   />
                 </div>
 
-                <div className="p-6 flex flex-col">
-                  <p className="text-xs font-body tracking-[0.2em] uppercase text-muted-foreground mb-2">
+                <div className="p-6 md:p-8 flex flex-col">
+                  <p className="eyebrow mb-2">
                     {product.brand}
                   </p>
-                  <h2 className="text-2xl font-display font-bold mb-3">{product.name}</h2>
+                  <h2 className="font-display font-semibold text-display-4 mb-3">{product.name}</h2>
 
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-xl font-body font-bold">{formatPrice(selectedVariant.price)}</span>
+                  <div className="flex items-center gap-3 mb-4 flex-wrap">
+                    <span className="text-price">{formatPrice(selectedVariant.price)}</span>
                     {selectedVariant.compareAtPrice && (
                       <>
                         <span className="text-base text-muted-foreground line-through">
@@ -137,7 +137,7 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
                   </p>
 
                   {product.details && (
-                    <dl className="text-xs font-body space-y-1.5 mb-5 border-y border-border py-4">
+                    <dl className="text-xs font-body space-y-1.5 mb-5 rounded-sm bg-muted/50 px-4 py-4">
                       {product.details.fabric && (
                         <div className="flex gap-2">
                           <dt className="font-semibold w-16 shrink-0">Fabric</dt>
@@ -165,7 +165,7 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
                         <span className="text-xs font-body font-semibold tracking-wide uppercase">Size</span>
                         <button
                           onClick={() => setShowSizeGuide(true)}
-                          className="text-xs font-body text-primary underline underline-offset-2 flex items-center gap-1"
+                          className="min-h-10 px-2 text-xs font-body text-primary underline underline-offset-2 flex items-center gap-1"
                         >
                           <Ruler className="w-3.5 h-3.5" /> Size Guide
                         </button>
@@ -176,7 +176,7 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
                             key={size}
                             onClick={() => setSelectedSize(size)}
                             aria-pressed={selectedSize === size}
-                            className={`min-w-[3rem] px-4 py-2.5 text-xs font-body font-medium border rounded-sm transition-all ${
+                            className={`min-w-12 min-h-11 px-4 py-3 text-xs font-body font-medium border rounded-sm transition-all ${
                               selectedSize === size
                                 ? "border-foreground bg-foreground text-background"
                                 : "border-border hover:border-foreground"
@@ -193,7 +193,7 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
                     <div className="flex items-center border border-border rounded-sm">
                       <button
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="px-3 py-2.5 hover:bg-muted transition-colors"
+                        className="min-w-11 min-h-11 px-3 py-3 hover:bg-muted transition-colors"
                         aria-label="Decrease quantity"
                       >
                         <Minus className="w-4 h-4" />
@@ -203,7 +203,7 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
                       </span>
                       <button
                         onClick={() => setQuantity(quantity + 1)}
-                        className="px-3 py-2.5 hover:bg-muted transition-colors"
+                        className="min-w-11 min-h-11 px-3 py-3 hover:bg-muted transition-colors"
                         aria-label="Increase quantity"
                       >
                         <Plus className="w-4 h-4" />
@@ -217,7 +217,7 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
                     </button>
                     <button
                       onClick={() => toggleItem(product)}
-                      className={`p-3 border rounded-sm transition-colors ${
+                      className={`min-w-11 min-h-11 p-3 border rounded-sm transition-colors ${
                         wishlisted ? "border-primary bg-primary/5" : "border-border hover:border-foreground"
                       }`}
                       aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}

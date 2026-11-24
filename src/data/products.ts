@@ -130,9 +130,10 @@ export const products: Product[] = [
     basePrice: 2499,
     images: [
       "/assets/night-suits/charcoal-starry-dream-set.jpg",
-      "/assets/night-suits/charcoal-starry-dream-set-details.jpg",
+      // Model-only crop of the old "details" composite (Phase 1B) — the
+      // info-card half with the misspelled brand is gone.
+      "/assets/night-suits/charcoal-starry-dream-set-model.jpg",
     ],
-    imagesFit: ["cover", "contain"],
     category: "Women's Pajama Sets",
     categorySlug: "womens",
     brand: "Al-ucaaz",
@@ -181,9 +182,10 @@ export const products: Product[] = [
     basePrice: 2499,
     images: [
       "/assets/night-suits/faith-blossom-navy.jpg",
-      "/assets/night-suits/faith-blossom-navy-details.jpg",
+      // Model-only crop of the old "details" composite (Phase 1B) — the
+      // info-card half with the misspelled brand is gone.
+      "/assets/night-suits/faith-blossom-navy-model.jpg",
     ],
-    imagesFit: ["cover", "contain"],
     category: "Women's Pajama Sets",
     categorySlug: "womens",
     brand: "Al-ucaaz",
@@ -208,9 +210,11 @@ export const products: Product[] = [
       "A bold black pajama set with white abstract line art. Fabric: Soft Cotton Jersey — lightweight, soft and smooth for all-day comfort. Breathable, relaxed fit. The set includes a short-sleeve crewneck T-shirt and elastic-waist pajama pants with side pockets. Machine washable, soft & cozy, everyday comfort.",
     shortDescription: "Bold black pajama set with white abstract line art — soft cotton jersey, breathable, relaxed fit.",
     basePrice: 2999,
-    images: ["/assets/night-suits/black-abstract-line-art-set.jpg"],
-    imagesFit: ["contain"],
-    imageFocus: "right",
+    // Clean model-only crop (Phase 1B): the original was a composite info card
+    // with a misspelled brand ("AL UCCAZ"); the crop is the model half only.
+    // The model's head is already cut off in the source — a clean original
+    // photo is still wanted from john.
+    images: ["/assets/night-suits/black-abstract-line-art-set-clean.jpg"],
     category: "Women's Pajama Sets",
     categorySlug: "womens",
     brand: "Al-ucaaz",
@@ -236,7 +240,10 @@ export const products: Product[] = [
     shortDescription: "Charcoal lounge set with a cheerful 'happy' script and sunflower print — NEW ARRIVAL, 50% OFF.",
     basePrice: 2499,
     compareAtPrice: 4998,
-    images: ["/assets/night-suits/happy-sunflower-set.jpg"],
+    // Clean flat-lay crop (Phase 1B): the original is a promo composite with
+    // baked-in text — it stays the campaign-banner image only (see Index.tsx),
+    // never the product-card photo.
+    images: ["/assets/night-suits/happy-sunflower-set-clean.jpg"],
     category: "Women's Pajama Sets",
     categorySlug: "womens",
     brand: "Al-ucaaz",
