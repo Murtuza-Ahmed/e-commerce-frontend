@@ -1,7 +1,8 @@
 export const SITE_NAME = "Al-ucaaz";
-export const FREE_SHIPPING_THRESHOLD = 250;
-export const SHIPPING_COST = 15;
-export const TAX_RATE = 0.08;
+// Placeholder store policy — confirm with the owner before launch.
+export const FREE_SHIPPING_THRESHOLD = 2999;
+export const SHIPPING_COST = 199;
+export const TAX_RATE = 0;
 
 // ⚠️ Apna real domain yahan lagao jab site live ho (sitemap, canonical URLs aur social share images ke liye use hota hai)
 export const SITE_URL = "https://al-ucaaz.vercel.app/";

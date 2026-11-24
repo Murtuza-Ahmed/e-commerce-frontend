@@ -35,7 +35,7 @@ function groupOf(p: Permission): string {
 }
 
 const inputCls =
-  "w-full bg-background border border-border rounded-sm px-3 py-2.5 text-sm font-body placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary";
+  "w-full min-h-11 bg-background border border-border rounded-sm px-3 py-2.5 text-small font-body placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary";
 
 const AdminRoles = () => {
   const [roles, setRoles] = useState<Role[]>([]);
@@ -184,8 +184,9 @@ const AdminRoles = () => {
       <div>
         <SEO title="Admin - Roles" />
         <div className="mb-8">
-          <h1 className="text-2xl font-display font-bold">Roles & Permissions</h1>
-          <p className="text-sm font-body text-muted-foreground mt-1">Loading roles…</p>
+          <p className="eyebrow mb-2">Admin</p>
+          <h1 className="font-display font-semibold text-display-3 md:text-display-2">Roles & Permissions</h1>
+          <p className="text-small font-body text-muted-foreground mt-2">Loading roles…</p>
         </div>
         <ProductGridSkeleton count={6} />
       </div>
@@ -198,16 +199,14 @@ const AdminRoles = () => {
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-display font-bold">Roles & Permissions</h1>
-          <p className="text-sm font-body text-muted-foreground mt-1">
+          <p className="eyebrow mb-2">Admin</p>
+          <h1 className="font-display font-semibold text-display-3 md:text-display-2">Roles & Permissions</h1>
+          <p className="text-small font-body text-muted-foreground mt-2">
             {roles.length} roles · {permissions.length} permissions
           </p>
         </div>
-        <button
-          onClick={openCreate}
-          className="flex items-center gap-2 bg-foreground text-background px-4 py-2.5 text-xs font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity"
-        >
-          <Plus className="w-4 h-4" /> New Role
+        <button onClick={openCreate} className="btn-primary">
+          <Plus className="w-4 h-4" /> New role
         </button>
       </div>
 
@@ -220,8 +219,8 @@ const AdminRoles = () => {
               <div
                 key={role.id}
                 onClick={() => setSelectedId(role.id)}
-                className={`bg-background border rounded-sm p-5 cursor-pointer transition-colors ${
-                  active ? "border-primary ring-1 ring-primary" : "hover:border-muted-foreground/40"
+                className={`bg-card border rounded-sm shadow-card p-5 cursor-pointer transition-colors ${
+                  active ? "border-primary ring-1 ring-primary" : "border-border hover:border-muted-foreground/40"
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
@@ -232,30 +231,32 @@ const AdminRoles = () => {
                       <Shield className="w-5 h-5 text-muted-foreground shrink-0" />
                     )}
                     <div className="min-w-0">
-                      <p className="font-display font-bold text-sm truncate">{role.name}</p>
-                      <p className="text-xs font-body text-muted-foreground mt-0.5">
+                      <p className="font-display font-semibold text-small truncate">{role.name}</p>
+                      <p className="text-caption font-body text-muted-foreground mt-0.5">
                         Level {role.level} · {role.permissions?.length ?? 0} permissions
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex items-center gap-1 shrink-0">
                     {role.isSystem && (
-                      <span className="text-[10px] font-body font-bold tracking-wider uppercase px-2 py-1 rounded-sm bg-primary/10 text-primary">
+                      <span className="text-caption font-body font-semibold tracking-wider uppercase px-2 py-1 rounded-sm bg-primary/10 text-primary">
                         System
                       </span>
                     )}
                     <button
                       onClick={(e) => { e.stopPropagation(); openEdit(role); }}
-                      className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
+                      className="min-h-10 min-w-10 flex items-center justify-center rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                       title="Edit role"
+                      aria-label={`Edit role ${role.name}`}
                     >
                       <Pencil className="w-3.5 h-3.5" />
                     </button>
                     {!role.isSystem && (
                       <button
                         onClick={(e) => { e.stopPropagation(); handleDelete(role); }}
-                        className="p-1.5 text-muted-foreground hover:text-destructive transition-colors"
+                        className="min-h-10 min-w-10 flex items-center justify-center rounded-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
                         title="Delete role"
+                        aria-label={`Delete role ${role.name}`}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -263,14 +264,14 @@ const AdminRoles = () => {
                   </div>
                 </div>
                 {role.description && (
-                  <p className="text-xs font-body text-muted-foreground mt-2 line-clamp-2">{role.description}</p>
+                  <p className="text-caption font-body text-muted-foreground mt-2 line-clamp-2">{role.description}</p>
                 )}
               </div>
             );
           })}
           {roles.length === 0 && (
-            <div className="bg-background border rounded-sm p-8 text-center">
-              <p className="text-sm font-body text-muted-foreground">Koi role nahi mila.</p>
+            <div className="bg-card border border-border rounded-sm shadow-card p-8 text-center">
+              <p className="text-small font-body text-muted-foreground">Koi role nahi mila.</p>
             </div>
           )}
         </div>
@@ -278,24 +279,24 @@ const AdminRoles = () => {
         {/* Detail + permission matrix */}
         <div className="lg:col-span-2">
           {selected ? (
-            <div className="bg-background border rounded-sm p-6">
-              <div className="flex items-center justify-between mb-1">
-                <h2 className="font-display font-bold text-lg flex items-center gap-2">
-                  <KeyRound className="w-5 h-5 text-primary" />
-                  {selected.name}
+            <div className="bg-card border border-border rounded-sm shadow-card p-6">
+              <div className="flex items-center justify-between gap-3 mb-1">
+                <h2 className="font-display font-semibold text-display-4 flex items-center gap-2 min-w-0">
+                  <KeyRound className="w-5 h-5 text-primary shrink-0" />
+                  <span className="truncate">{selected.name}</span>
                 </h2>
-                <span className="text-xs font-body text-muted-foreground">
+                <span className="text-caption font-body text-muted-foreground whitespace-nowrap">
                   {checked.size} / {permissions.length} selected
                 </span>
               </div>
-              <p className="text-sm font-body text-muted-foreground mb-6">
+              <p className="text-small font-body text-muted-foreground mb-6">
                 {selected.description || "Koi description nahi."}
               </p>
 
               <div className="space-y-6 max-h-[520px] overflow-y-auto pr-1">
                 {grouped.map(([group, perms]) => (
                   <div key={group}>
-                    <p className="text-[10px] font-body font-bold tracking-widest uppercase text-muted-foreground mb-2">
+                    <p className="text-caption font-body font-semibold tracking-widest uppercase text-muted-foreground mb-2">
                       {group}
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -304,20 +305,20 @@ const AdminRoles = () => {
                         return (
                           <label
                             key={p.id}
-                            className={`flex items-start gap-3 border rounded-sm p-3 cursor-pointer transition-colors ${
-                              on ? "border-primary bg-primary/5" : "hover:border-muted-foreground/40"
+                            className={`flex items-start gap-3 border rounded-sm p-3 min-h-11 cursor-pointer transition-colors ${
+                              on ? "border-primary bg-primary/5" : "border-border hover:border-muted-foreground/40"
                             }`}
                           >
                             <input
                               type="checkbox"
                               checked={on}
                               onChange={() => togglePerm(p.id)}
-                              className="mt-0.5 w-4 h-4 accent-primary"
+                              className="mt-0.5 w-4 h-4 shrink-0 accent-primary"
                             />
                             <span className="min-w-0">
-                              <span className="block text-xs font-body font-semibold font-mono">{p.key}</span>
+                              <span className="block text-caption font-body font-semibold font-mono">{p.key}</span>
                               {p.description && (
-                                <span className="block text-[11px] font-body text-muted-foreground mt-0.5">
+                                <span className="block text-caption font-body text-muted-foreground mt-0.5">
                                   {p.description}
                                 </span>
                               )}
@@ -334,17 +335,17 @@ const AdminRoles = () => {
                 <button
                   onClick={handleSavePermissions}
                   disabled={saving}
-                  className="flex items-center gap-2 bg-foreground text-background px-5 py-2.5 text-xs font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+                  className="btn-primary"
                 >
                   {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                  Save Permissions
+                  Save permissions
                 </button>
               </div>
             </div>
           ) : (
-            <div className="bg-background border rounded-sm p-12 text-center">
+            <div className="bg-card border border-border rounded-sm shadow-card p-12 text-center">
               <Shield className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
-              <p className="text-sm font-body text-muted-foreground">Role select karo taake permissions dekho.</p>
+              <p className="text-small font-body text-muted-foreground">Role select karo taake permissions dekho.</p>
             </div>
           )}
         </div>
@@ -355,19 +356,19 @@ const AdminRoles = () => {
         <Modal onClose={() => setShowCreate(false)} title="New Role">
           <div className="space-y-4">
             <div>
-              <label className="text-xs font-body font-semibold tracking-wider uppercase text-muted-foreground">Name</label>
+              <label className="text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground block mb-1.5">Name</label>
               <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={inputCls} placeholder="e.g. support_agent" />
             </div>
             <div>
-              <label className="text-xs font-body font-semibold tracking-wider uppercase text-muted-foreground">Description</label>
+              <label className="text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground block mb-1.5">Description</label>
               <input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className={inputCls} placeholder="Optional" />
             </div>
             <div>
-              <label className="text-xs font-body font-semibold tracking-wider uppercase text-muted-foreground">Level (1–99)</label>
+              <label className="text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground block mb-1.5">Level (1–99)</label>
               <input type="number" min={1} max={99} value={form.level} onChange={(e) => setForm({ ...form, level: Number(e.target.value) })} className={inputCls} />
             </div>
-            <button onClick={handleCreate} className="w-full bg-foreground text-background py-2.5 text-xs font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity">
-              Create Role
+            <button onClick={handleCreate} className="btn-primary w-full">
+              Create role
             </button>
           </div>
         </Modal>
@@ -378,7 +379,7 @@ const AdminRoles = () => {
         <Modal onClose={() => setEditRole(null)} title={`Edit — ${editRole.name}`}>
           <div className="space-y-4">
             <div>
-              <label className="text-xs font-body font-semibold tracking-wider uppercase text-muted-foreground">Name</label>
+              <label className="text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground block mb-1.5">Name</label>
               <input
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -387,15 +388,15 @@ const AdminRoles = () => {
                 placeholder="Role name"
               />
               {editRole.isSystem && (
-                <p className="text-[11px] font-body text-muted-foreground mt-1">System role ka naam change nahi ho sakta.</p>
+                <p className="text-caption font-body text-muted-foreground mt-1">System role ka naam change nahi ho sakta.</p>
               )}
             </div>
             <div>
-              <label className="text-xs font-body font-semibold tracking-wider uppercase text-muted-foreground">Description</label>
+              <label className="text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground block mb-1.5">Description</label>
               <input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className={inputCls} placeholder="Optional" />
             </div>
-            <button onClick={handleEdit} className="w-full bg-foreground text-background py-2.5 text-xs font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity">
-              Save Changes
+            <button onClick={handleEdit} className="btn-primary w-full">
+              Save changes
             </button>
           </div>
         </Modal>
@@ -408,10 +409,10 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-foreground/40" onClick={onClose} />
-      <div className="relative bg-background border border-border rounded-sm p-6 w-full max-w-md shadow-xl">
+      <div className="relative bg-card border border-border rounded-sm shadow-elevated p-6 w-full max-w-md">
         <div className="flex items-center justify-between mb-5">
-          <h3 className="font-display font-bold text-base">{title}</h3>
-          <button onClick={onClose} className="p-1 text-muted-foreground hover:text-foreground transition-colors">
+          <h3 className="font-display font-semibold text-display-4">{title}</h3>
+          <button onClick={onClose} aria-label="Close" className="min-h-10 min-w-10 flex items-center justify-center rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>

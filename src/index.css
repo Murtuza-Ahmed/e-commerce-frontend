@@ -1,107 +1,74 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  /*
+   * SINGLE THEME — Forest & Ivory (2026-11-08).
+   * Official brand identity: Forest Green #183D32 (162 44% 17%) and
+   * Ivory #F3F0E7 (45 33% 93%). The Dark + Gold theme was removed
+   * completely — no conflicting themes, no legacy gold tokens.
+   * All tokens are HSL triplets (hsl(var(--...))) as Tailwind v3 expects.
+   */
   :root {
-    --background: 40 25% 97%;
-    --foreground: 30 10% 8%;
+    --background: 45 33% 93%;
+    --foreground: 165 30% 16%;
 
-    --card: 40 20% 99%;
-    --card-foreground: 30 10% 8%;
+    --card: 45 30% 97%;
+    --card-foreground: 165 30% 16%;
 
-    --popover: 40 20% 99%;
-    --popover-foreground: 30 10% 8%;
+    --popover: 45 30% 97%;
+    --popover-foreground: 165 30% 16%;
 
-    --primary: 32 90% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 162 44% 17%;
+    --primary-foreground: 45 33% 93%;
 
-    --secondary: 35 15% 92%;
-    --secondary-foreground: 30 10% 15%;
+    --secondary: 45 25% 88%;
+    --secondary-foreground: 165 30% 16%;
 
-    --muted: 35 12% 93%;
-    --muted-foreground: 30 8% 45%;
+    --muted: 45 20% 90%;
+    --muted-foreground: 160 12% 42%;
 
-    --accent: 25 75% 52%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 162 35% 26%;
+    --accent-foreground: 45 33% 93%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 55% 42%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 35 18% 88%;
-    --input: 35 18% 88%;
-    --ring: 32 90% 50%;
+    --border: 45 15% 82%;
+    --input: 45 15% 82%;
+    --ring: 162 44% 17%;
 
     --radius: 0.375rem;
 
-    --sidebar-background: 30 10% 6%;
-    --sidebar-foreground: 40 15% 90%;
-    --sidebar-primary: 32 90% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 30 10% 12%;
-    --sidebar-accent-foreground: 40 15% 90%;
-    --sidebar-border: 30 10% 15%;
-    --sidebar-ring: 32 90% 50%;
+    --sidebar-background: 162 44% 14%;
+    --sidebar-foreground: 45 30% 92%;
+    --sidebar-primary: 162 35% 24%;
+    --sidebar-primary-foreground: 45 33% 95%;
+    --sidebar-accent: 162 40% 20%;
+    --sidebar-accent-foreground: 45 33% 93%;
+    --sidebar-border: 162 35% 22%;
+    --sidebar-ring: 45 33% 93%;
+
+    /* Brand tokens */
+    --forest: 162 44% 17%;
+    --forest-deep: 162 44% 12%;
+    --forest-soft: 162 35% 26%;
+    --forest-mist: 162 25% 92%;
+    --ivory: 45 33% 93%;
+    --ivory-light: 45 30% 97%;
+    --ivory-deep: 45 25% 88%;
 
     /* Custom tokens */
-    --hero-gradient: linear-gradient(135deg, hsl(30 10% 8%) 0%, hsl(30 15% 18%) 100%);
-    --gold-shimmer: linear-gradient(90deg, hsl(32 90% 50%), hsl(40 95% 60%), hsl(32 90% 50%));
-    --surface-elevated: 40 20% 100%;
-    --badge-sale: 0 72% 51%;
-    --badge-new: 160 70% 40%;
-    --success: 160 70% 40%;
+    --surface-elevated: 45 30% 97%;
+    --badge-sale: 0 55% 42%;
+    --badge-new: 162 44% 22%;
+    --success: 150 40% 32%;
     --success-foreground: 0 0% 100%;
-    --warning: 40 95% 55%;
-    --warning-foreground: 30 10% 8%;
-  }
-
-  .dark {
-    --background: 30 10% 6%;
-    --foreground: 40 15% 92%;
-
-    --card: 30 10% 9%;
-    --card-foreground: 40 15% 92%;
-
-    --popover: 30 10% 9%;
-    --popover-foreground: 40 15% 92%;
-
-    --primary: 32 90% 50%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 30 10% 14%;
-    --secondary-foreground: 40 15% 90%;
-
-    --muted: 30 8% 16%;
-    --muted-foreground: 35 10% 55%;
-
-    --accent: 25 75% 52%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 62% 40%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 30 8% 18%;
-    --input: 30 8% 18%;
-    --ring: 32 90% 50%;
-
-    --success: 160 65% 45%;
-    --success-foreground: 0 0% 100%;
-    --warning: 40 95% 60%;
-    --warning-foreground: 30 10% 8%;
-    --badge-sale: 0 62% 45%;
-    --badge-new: 160 65% 45%;
-
-    --surface-elevated: 30 10% 12%;
-    --sidebar-background: 30 10% 4%;
-    --sidebar-foreground: 40 15% 90%;
-    --sidebar-primary: 32 90% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 30 10% 10%;
-    --sidebar-accent-foreground: 40 15% 90%;
-    --sidebar-border: 30 10% 12%;
-    --sidebar-ring: 32 90% 50%;
+    --warning: 38 70% 45%;
+    --warning-foreground: 0 0% 100%;
   }
 }
 
@@ -116,27 +83,74 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+/*
+ * Buttons — Design System (Forest & Ivory). 14px / 600, radius 6px,
+ * sentence case (no uppercase). Primary is Forest with Ivory text;
+ * hover is deeper Forest. Use these classes instead of hand-rolled buttons.
+ */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3 text-sm font-body font-semibold rounded-md transition-colors hover:bg-forest-deep disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 bg-transparent text-primary border border-primary/40 px-6 py-3 text-sm font-body font-semibold rounded-md transition-colors hover:bg-primary/5 disabled:opacity-50;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 bg-transparent text-muted-foreground px-6 py-3 text-sm font-body font-semibold rounded-md transition-colors hover:bg-muted hover:text-foreground disabled:opacity-50;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 bg-destructive text-destructive-foreground px-6 py-3 text-sm font-body font-semibold rounded-md transition-colors hover:opacity-90 disabled:opacity-50;
+  }
+
+  /* Editorial eyebrow label — small-caps kicker above headings. */
+  .eyebrow {
+    @apply text-xs font-body font-medium tracking-[0.2em] uppercase text-muted-foreground;
+  }
+
+  /* Section heading — Cormorant, 32px desktop. */
+  .section-title {
+    @apply font-display font-semibold text-display-3 text-foreground;
+  }
+
+  /* Forest panel — Ivory text on Forest, for banners and footers. */
+  .panel-forest {
+    @apply bg-primary text-primary-foreground;
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
   }
-  
+
   .font-body {
     font-family: 'DM Sans', system-ui, sans-serif;
   }
 
-  .hero-gradient {
-    background: var(--hero-gradient);
-  }
-
-  .gold-shimmer {
-    background: var(--gold-shimmer);
-    background-size: 200% 100%;
-    animation: shimmer 3s ease-in-out infinite;
+  /* Hero H1: 38–46px mobile → 56–76px desktop. */
+  .text-hero {
+    font-size: clamp(2.375rem, 6vw, 4.75rem);
+    line-height: 1.05;
+    font-weight: 600;
   }
 
   .text-balance {
@@ -150,11 +164,6 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-}
-
-@keyframes shimmer {
-  0%, 100% { background-position: -200% 0; }
-  50% { background-position: 200% 0; }
 }
 
 @keyframes fade-in {
@@ -173,4 +182,15 @@
 
 .animate-slide-up {
   animation: slide-up 0.6s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

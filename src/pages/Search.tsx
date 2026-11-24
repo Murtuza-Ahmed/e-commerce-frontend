@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { products } from "@/data/products";
 import { ProductGrid } from "@/components/product/ProductGrid";
-import { Search as SearchIcon, X } from "lucide-react";
+import { Search as SearchIcon, SearchX, X } from "lucide-react";
 import { SEO } from "@/components/SEO";
 
 const Search = () => {
@@ -33,14 +33,19 @@ const Search = () => {
     );
   }, [query]);
 
-  const suggestions = ["Wool", "Silk", "Leather", "Cashmere", "Linen"];
+  const suggestions = ["Pajama", "Cotton Jersey", "Satin", "Couple", "Faith"];
 
   return (
     <div className="container py-8 md:py-12">
-      <SEO title="Search" description="Search our premium fashion collection." />
+      <SEO title="Search" description="Search our night suits & pajama sets." />
+
+      <div className="text-center mb-10">
+        <p className="eyebrow mb-2">Find your piece</p>
+        <h1 className="text-display-2">Search the Collection</h1>
+      </div>
 
       <div className="max-w-2xl mx-auto mb-12">
-        <div className="relative">
+        <div className="relative shadow-card rounded-sm">
           <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
             type="search"
@@ -48,13 +53,13 @@ const Search = () => {
             onChange={(e) => handleChange(e.target.value)}
             placeholder="Search products..."
             autoFocus
-            className="w-full pl-12 pr-12 py-4 bg-background border border-border rounded-sm text-base font-body focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="w-full min-h-14 pl-12 pr-12 py-4 bg-card border border-border rounded-sm text-base font-body focus:outline-none focus:ring-2 focus:ring-primary/30"
             aria-label="Search products"
           />
           {query && (
             <button
               onClick={() => handleChange("")}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 min-w-10 min-h-10 flex items-center justify-center text-muted-foreground hover:text-foreground"
               aria-label="Clear search"
             >
               <X className="w-5 h-5" />
@@ -62,13 +67,13 @@ const Search = () => {
           )}
         </div>
         {!query && (
-          <div className="flex flex-wrap gap-2 mt-4">
-            <span className="text-xs font-body text-muted-foreground mr-2">Popular:</span>
+          <div className="flex flex-wrap gap-2 mt-4 justify-center">
+            <span className="text-xs font-body text-muted-foreground mr-2 py-1.5">Popular:</span>
             {suggestions.map((s) => (
               <button
                 key={s}
                 onClick={() => handleChange(s)}
-                className="text-xs font-body px-3 py-1.5 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
+                className="min-h-10 text-xs font-body px-3 py-1.5 rounded-full bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
               >
                 {s}
               </button>
@@ -79,15 +84,28 @@ const Search = () => {
 
       {query && (
         <div>
-          <p className="text-sm font-body text-muted-foreground mb-6" aria-live="polite">
-            {results.length} result{results.length !== 1 ? "s" : ""} for "{query}"
+          <p className="text-small text-muted-foreground mb-6 pb-4 border-b border-border" aria-live="polite">
+            {results.length} result{results.length !== 1 ? "s" : ""} for &ldquo;{query}&rdquo;
           </p>
           {results.length > 0 ? (
             <ProductGrid products={results} />
           ) : (
-            <div className="text-center py-16">
-              <p className="text-lg font-display font-bold mb-2">No results found</p>
-              <p className="text-sm font-body text-muted-foreground">Try a different search term</p>
+            <div className="text-center py-16 md:py-24 bg-card border border-border rounded-md shadow-card">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-forest-mist flex items-center justify-center">
+                <SearchX className="w-8 h-8 text-primary" />
+              </div>
+              <h2 className="font-display font-semibold text-display-4 mb-2">No results found</h2>
+              <p className="text-sm font-body text-muted-foreground mb-8">
+                Try a different search term, or browse the full collection.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button onClick={() => handleChange("")} className="btn-secondary">
+                  Clear Search
+                </button>
+                <Link to="/shop" className="btn-primary">
+                  Browse All Night Suits
+                </Link>
+              </div>
             </div>
           )}
         </div>

@@ -11,21 +11,30 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-8">
+    <div className="flex min-h-[70vh] items-center justify-center bg-background p-8">
       <SEO title="Page Not Found" />
       <div className="text-center max-w-md">
+        <p className="eyebrow mb-4">Al-ucaaz</p>
         <p className="text-8xl font-display font-bold text-primary/20 mb-4">404</p>
-        <h1 className="text-2xl font-display font-bold mb-3">Page not found</h1>
+        <h1 className="font-display font-semibold text-display-3 mb-3">Page not found</h1>
         <p className="text-sm font-body text-muted-foreground mb-8">
-          The page you're looking for doesn't exist or has been moved.
+          The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 bg-foreground text-background px-8 py-3.5 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link
+            to="/"
+            className="btn-primary"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </Link>
+          <Link
+            to="/shop"
+            className="btn-secondary"
+          >
+            Browse the Shop
+          </Link>
+        </div>
       </div>
     </div>
   );

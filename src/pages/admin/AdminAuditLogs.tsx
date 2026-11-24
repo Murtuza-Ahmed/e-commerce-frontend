@@ -28,7 +28,7 @@ function detailsSummary(details?: Record<string, unknown> | null): string {
 }
 
 const inputCls =
-  "bg-background border border-border rounded-sm px-3 py-2.5 text-sm font-body placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary";
+  "bg-card border border-border rounded-sm px-3 py-2.5 min-h-11 text-small font-body placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary";
 
 const AdminAuditLogs = () => {
   const [logs, setLogs] = useState<AuditLog[]>([]);
@@ -82,23 +82,25 @@ const AdminAuditLogs = () => {
       <SEO title="Admin - Audit Logs" />
 
       <div className="mb-8">
-        <h1 className="text-2xl font-display font-bold flex items-center gap-2">
-          <ScrollText className="w-6 h-6 text-primary" />
+        <p className="eyebrow mb-2">Admin</p>
+        <h1 className="font-display font-semibold text-display-3 md:text-display-2 flex items-center gap-3">
+          <ScrollText className="w-7 h-7 text-primary shrink-0" />
           Audit Logs
         </h1>
-        <p className="text-sm font-body text-muted-foreground mt-1">
+        <p className="text-small font-body text-muted-foreground mt-2">
           {total} total events — har staff action ka record
         </p>
       </div>
 
       {/* Filters */}
-      <div className="bg-background border border-border rounded-sm p-4 mb-6 flex flex-col sm:flex-row gap-3">
+      <div className="bg-card border border-border rounded-sm shadow-card p-4 mb-6 flex flex-col sm:flex-row gap-3">
         <input
           value={action}
           onChange={(e) => setAction(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           className={`${inputCls} flex-1`}
           placeholder="Action filter — e.g. users.delete"
+          aria-label="Filter by action"
         />
         <input
           value={actor}
@@ -106,11 +108,12 @@ const AdminAuditLogs = () => {
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           className={`${inputCls} flex-1`}
           placeholder="Actor email — e.g. admin@al-ucaaz.com"
+          aria-label="Filter by actor email"
         />
         <button
           onClick={handleSearch}
           disabled={searching}
-          className="flex items-center justify-center gap-2 bg-foreground text-background px-5 py-2.5 text-xs font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+          className="btn-primary"
         >
           {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
           Search
@@ -121,37 +124,37 @@ const AdminAuditLogs = () => {
       {loading ? (
         <TableSkeleton rows={8} cols={5} />
       ) : (
-        <div className="bg-background border border-border rounded-sm overflow-hidden">
+        <div className="bg-card border border-border rounded-sm shadow-card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left text-[10px] font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">Time</th>
-                  <th className="text-left text-[10px] font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">Actor</th>
-                  <th className="text-left text-[10px] font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">Action</th>
-                  <th className="text-left text-[10px] font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3 hidden md:table-cell">Target</th>
-                  <th className="text-left text-[10px] font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3 hidden lg:table-cell">Details</th>
+                <tr className="border-b border-border bg-muted/40">
+                  <th className="text-left text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">Time</th>
+                  <th className="text-left text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">Actor</th>
+                  <th className="text-left text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3">Action</th>
+                  <th className="text-left text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3 hidden md:table-cell">Target</th>
+                  <th className="text-left text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground px-4 py-3 hidden lg:table-cell">Details</th>
                 </tr>
               </thead>
               <tbody>
                 {logs.map((log) => (
-                  <tr key={log.id} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
-                    <td className="px-4 py-3 text-xs font-body text-muted-foreground whitespace-nowrap">
+                  <tr key={log.id} className="border-b border-border last:border-0 hover:bg-muted/40 transition-colors">
+                    <td className="px-4 py-3 text-caption font-body text-muted-foreground whitespace-nowrap">
                       {new Date(log.createdAt).toLocaleString()}
                     </td>
-                    <td className="px-4 py-3 text-sm font-body font-medium max-w-[200px] truncate">
+                    <td className="px-4 py-3 text-small font-body font-medium max-w-[200px] truncate">
                       {log.actorEmail ?? "system"}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`text-[10px] font-body font-bold tracking-wider uppercase px-2 py-1 rounded-sm font-mono ${actionBadge(log.action)}`}>
+                      <span className={`text-caption font-body font-semibold tracking-wider uppercase px-2 py-1 rounded-sm font-mono ${actionBadge(log.action)}`}>
                         {log.action}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs font-body text-muted-foreground hidden md:table-cell">
+                    <td className="px-4 py-3 text-caption font-body text-muted-foreground hidden md:table-cell">
                       {log.targetType ? `${log.targetType}${log.targetId ? ` · ${log.targetId.slice(0, 8)}` : ""}` : "—"}
                     </td>
                     <td
-                      className="px-4 py-3 text-xs font-body text-muted-foreground hidden lg:table-cell max-w-[280px] truncate"
+                      className="px-4 py-3 text-caption font-body text-muted-foreground hidden lg:table-cell max-w-[280px] truncate"
                       title={log.details ? JSON.stringify(log.details) : undefined}
                     >
                       {detailsSummary(log.details)}
@@ -160,7 +163,7 @@ const AdminAuditLogs = () => {
                 ))}
                 {logs.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="px-4 py-10 text-center text-sm font-body text-muted-foreground">
+                    <td colSpan={5} className="px-4 py-10 text-center text-small font-body text-muted-foreground">
                       Koi audit log nahi mila.
                     </td>
                   </tr>
@@ -170,22 +173,22 @@ const AdminAuditLogs = () => {
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-between px-4 py-3 border-t border-border">
-            <p className="text-xs font-body text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-t border-border">
+            <p className="text-caption font-body text-muted-foreground">
               Page {page} of {totalPages}
             </p>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => gotoPage(page - 1)}
                 disabled={page <= 1}
-                className="flex items-center gap-1 border border-border px-3 py-1.5 text-xs font-body font-medium rounded-sm hover:bg-muted transition-colors disabled:opacity-40"
+                className="btn-secondary"
               >
                 <ChevronLeft className="w-3.5 h-3.5" /> Prev
               </button>
               <button
                 onClick={() => gotoPage(page + 1)}
                 disabled={page >= totalPages}
-                className="flex items-center gap-1 border border-border px-3 py-1.5 text-xs font-body font-medium rounded-sm hover:bg-muted transition-colors disabled:opacity-40"
+                className="btn-secondary"
               >
                 Next <ChevronRight className="w-3.5 h-3.5" />
               </button>

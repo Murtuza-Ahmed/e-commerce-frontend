@@ -86,48 +86,53 @@ const AdminDashboard = () => {
         <PageHeaderSkeleton />
       ) : (
         <div className="mb-8">
-          <h1 className="text-2xl font-display font-bold">Dashboard</h1>
-          <p className="text-sm font-body text-muted-foreground mt-1">
+          <p className="eyebrow mb-2">Admin</p>
+          <h1 className="font-display font-semibold text-display-3 md:text-display-2">Dashboard</h1>
+          <p className="text-small font-body text-muted-foreground mt-2">
             Welcome back{user?.name ? `, ${user.name}` : ""}. Live data backend se.
           </p>
         </div>
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {loading
           ? stats.map((s) => (
-              <div key={s.label} className="bg-background border border-border rounded-sm p-5 animate-pulse">
-                <div className="h-5 w-5 rounded bg-muted mb-3" />
-                <div className="h-7 w-16 rounded bg-muted mb-1" />
+              <div key={s.label} className="bg-card border border-border rounded-sm shadow-card p-5 animate-pulse">
+                <div className="h-10 w-10 rounded-sm bg-muted mb-4" />
+                <div className="h-7 w-16 rounded bg-muted mb-2" />
                 <div className="h-3 w-20 rounded bg-muted" />
               </div>
             ))
           : stats.map((s) => (
-              <div key={s.label} className="bg-background border border-border rounded-sm p-5">
-                <s.icon className="w-5 h-5 text-muted-foreground mb-3" />
-                <p className="text-2xl font-body font-bold">{s.value ?? "—"}</p>
-                <p className="text-xs font-body text-muted-foreground mt-0.5">{s.label}</p>
+              <div key={s.label} className="bg-card border border-border rounded-sm shadow-card p-5">
+                <div className="w-10 h-10 rounded-sm bg-forest-mist flex items-center justify-center mb-4">
+                  <s.icon className="w-5 h-5 text-primary" />
+                </div>
+                <p className="text-display-4 font-body font-bold">{s.value ?? "—"}</p>
+                <p className="text-caption font-body text-muted-foreground mt-1">{s.label}</p>
               </div>
             ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Quick links */}
-        <div className="bg-background border border-border rounded-sm p-6">
-          <h2 className="font-display font-bold text-base mb-4">Quick Links</h2>
+        <div className="bg-card border border-border rounded-sm shadow-card p-6">
+          <h2 className="font-display font-semibold text-display-4 mb-5">Quick Links</h2>
           <div className="space-y-2">
             {visibleLinks.map((l) => (
               <Link
                 key={l.href}
                 to={l.href}
-                className="flex items-center justify-between gap-3 border border-border rounded-sm p-3.5 hover:border-muted-foreground/40 hover:bg-muted/30 transition-colors"
+                className="flex items-center justify-between gap-3 border border-border rounded-sm p-3.5 min-h-14 hover:border-primary/40 hover:bg-muted/40 transition-colors"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <l.icon className="w-4 h-4 text-primary shrink-0" />
+                  <span className="w-9 h-9 rounded-sm bg-forest-mist flex items-center justify-center shrink-0">
+                    <l.icon className="w-4 h-4 text-primary" />
+                  </span>
                   <div className="min-w-0">
-                    <p className="text-sm font-body font-semibold">{l.label}</p>
-                    <p className="text-xs font-body text-muted-foreground truncate">{l.desc}</p>
+                    <p className="text-small font-body font-semibold">{l.label}</p>
+                    <p className="text-caption font-body text-muted-foreground truncate">{l.desc}</p>
                   </div>
                 </div>
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground shrink-0" />
@@ -138,15 +143,15 @@ const AdminDashboard = () => {
 
         {/* Recent activity — sirf super_admin */}
         {superAdmin && (
-          <div className="bg-background border border-border rounded-sm p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-display font-bold text-base flex items-center gap-2">
+          <div className="bg-card border border-border rounded-sm shadow-card p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="font-display font-semibold text-display-4 flex items-center gap-2">
                 <Activity className="w-4 h-4 text-primary" />
                 Recent Activity
               </h2>
               <Link
                 to="/admin/audit-logs"
-                className="text-xs font-body font-medium text-primary hover:underline"
+                className="flex items-center min-h-10 px-2 text-caption font-body font-medium text-primary hover:underline"
               >
                 View all
               </Link>
@@ -158,27 +163,27 @@ const AdminDashboard = () => {
                 ))}
               </div>
             ) : recent.length === 0 ? (
-              <p className="text-sm font-body text-muted-foreground">Abhi koi activity nahi.</p>
+              <p className="text-small font-body text-muted-foreground">Abhi koi activity nahi.</p>
             ) : (
               <ul className="space-y-1">
                 {recent.map((log) => (
                   <li
                     key={log.id}
-                    className="flex items-start justify-between gap-3 py-2.5 border-b border-border last:border-0"
+                    className="flex items-start justify-between gap-3 py-3 border-b border-border last:border-0"
                   >
                     <div className="min-w-0">
-                      <p className="text-sm font-body">
+                      <p className="text-small font-body">
                         <span className="font-semibold">{log.actorEmail ?? "system"}</span>
                         <span className="text-muted-foreground"> · </span>
-                        <span className="font-mono text-xs">{log.action}</span>
+                        <span className="font-mono text-caption">{log.action}</span>
                       </p>
                       {log.targetType && (
-                        <p className="text-xs font-body text-muted-foreground mt-0.5">
+                        <p className="text-caption font-body text-muted-foreground mt-0.5">
                           {log.targetType}
                         </p>
                       )}
                     </div>
-                    <span className="text-[11px] font-body text-muted-foreground whitespace-nowrap shrink-0">
+                    <span className="text-caption font-body text-muted-foreground whitespace-nowrap shrink-0">
                       {new Date(log.createdAt).toLocaleString()}
                     </span>
                   </li>

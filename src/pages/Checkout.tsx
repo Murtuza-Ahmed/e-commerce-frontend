@@ -53,13 +53,13 @@ const Checkout = () => {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             to="/shop"
-            className="bg-foreground text-background px-8 py-3.5 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity"
+            className="btn-primary"
           >
             Continue Shopping
           </Link>
           <Link
             to="/dashboard"
-            className="border border-border px-8 py-3.5 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:bg-muted transition-colors"
+            className="btn-secondary"
           >
             Track Order
           </Link>
@@ -73,7 +73,8 @@ const Checkout = () => {
       <div className="container py-20 text-center">
         <SEO title="Checkout" />
         <h1 className="text-2xl font-display font-bold mb-4">No items to checkout</h1>
-        <Link to="/shop" className="text-sm font-body text-primary hover:underline">Continue Shopping</Link>
+        <p className="text-sm font-body text-muted-foreground mb-8">Your cart is empty — add a piece first.</p>
+        <Link to="/shop" className="btn-primary">Continue Shopping</Link>
       </div>
     );
   }
@@ -105,10 +106,28 @@ const Checkout = () => {
   return (
     <div className="container py-8 md:py-12 max-w-4xl">
       <SEO title="Checkout" description="Complete your Al-ucaaz purchase securely." />
-      <h1 className="text-3xl font-display font-bold mb-8">Checkout</h1>
+      <p className="eyebrow mb-2">Almost there</p>
+      <h1 className="text-display-2 mb-8">Checkout</h1>
+
+      <ol className="flex items-center gap-2 md:gap-4 mb-10 text-xs font-body text-muted-foreground" aria-label="Checkout steps">
+        <li className="flex items-center gap-2">
+          <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">1</span>
+          Contact
+        </li>
+        <li className="flex-1 h-px bg-border" aria-hidden="true" />
+        <li className="flex items-center gap-2">
+          <span className="w-6 h-6 rounded-full bg-forest-mist text-primary flex items-center justify-center font-semibold">2</span>
+          Shipping
+        </li>
+        <li className="flex-1 h-px bg-border" aria-hidden="true" />
+        <li className="flex items-center gap-2">
+          <span className="w-6 h-6 rounded-full bg-forest-mist text-primary flex items-center justify-center font-semibold">3</span>
+          Payment
+        </li>
+      </ol>
 
       {!isAuthenticated && (
-        <div className="bg-muted rounded-sm p-4 mb-8 flex items-center justify-between">
+        <div className="bg-forest-mist border border-border rounded-md p-4 mb-8 flex items-center justify-between gap-4">
           <p className="text-sm font-body text-muted-foreground">Already have an account?</p>
           <Link to="/auth" className="text-sm font-body font-medium text-primary hover:underline">Sign In</Link>
         </div>
@@ -118,7 +137,7 @@ const Checkout = () => {
         {/* Form */}
         <div className="lg:col-span-3 space-y-8">
           <div>
-            <h2 className="font-body font-semibold text-sm tracking-wider uppercase mb-4">Contact Information</h2>
+            <h2 className="font-display font-semibold text-display-4 mb-4">Contact Information</h2>
             <FormField
               type="email"
               placeholder="Email address"
@@ -130,7 +149,7 @@ const Checkout = () => {
           </div>
 
           <div>
-            <h2 className="font-body font-semibold text-sm tracking-wider uppercase mb-4">Shipping Address</h2>
+            <h2 className="font-display font-semibold text-display-4 mb-4">Shipping Address</h2>
             <div className="grid grid-cols-2 gap-3">
               <FormField placeholder="First name" value={form.firstName} onChange={updateField("firstName")} error={errors.firstName} autoComplete="given-name" />
               <FormField placeholder="Last name" value={form.lastName} onChange={updateField("lastName")} error={errors.lastName} autoComplete="family-name" />
@@ -146,8 +165,8 @@ const Checkout = () => {
           </div>
 
           <div>
-            <h2 className="font-body font-semibold text-sm tracking-wider uppercase mb-4">Payment</h2>
-            <div className="border border-border rounded-sm p-6 text-center">
+            <h2 className="font-display font-semibold text-display-4 mb-4">Payment</h2>
+            <div className="border border-border rounded-md bg-card shadow-card p-6 text-center">
               <p className="text-sm font-body text-muted-foreground">
                 Payment gateway integration ready (Stripe, PayPal, JazzCash, EasyPaisa)
               </p>
@@ -160,8 +179,8 @@ const Checkout = () => {
 
         {/* Order summary */}
         <div className="lg:col-span-2">
-          <div className="bg-muted/50 rounded-sm p-6 sticky top-28">
-            <h2 className="font-body font-semibold text-sm tracking-wider uppercase mb-4">Order Summary</h2>
+          <div className="bg-card border border-border rounded-md shadow-card p-6 sticky top-28">
+            <h2 className="font-display font-semibold text-display-4 mb-4">Order Summary</h2>
             <div className="space-y-3 mb-4">
               {items.map((item) => (
                 <div key={item.variant.id} className="flex gap-3">
@@ -186,7 +205,9 @@ const Checkout = () => {
             <div className="border-t border-border pt-3 space-y-2 text-sm font-body">
               <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatPrice(subtotal)}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Shipping</span><span>{shipping === 0 ? "Free" : formatPrice(shipping)}</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Tax</span><span>{formatPrice(tax)}</span></div>
+              {tax > 0 && (
+                <div className="flex justify-between"><span className="text-muted-foreground">Tax</span><span>{formatPrice(tax)}</span></div>
+              )}
               <div className="border-t border-border pt-2 flex justify-between font-semibold">
                 <span>Total</span><span className="text-lg">{formatPrice(total)}</span>
               </div>
@@ -194,7 +215,7 @@ const Checkout = () => {
             <button
               onClick={handlePlaceOrder}
               disabled={placing}
-              className="w-full bg-foreground text-background py-3.5 text-sm font-body font-semibold tracking-wider uppercase rounded-sm hover:opacity-90 transition-opacity mt-6 disabled:opacity-50"
+              className="btn-primary w-full mt-6"
             >
               {placing ? "Processing..." : "Place Order"}
             </button>

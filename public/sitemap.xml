@@ -2,139 +2,91 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://al-ucaaz.com/</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://al-ucaaz.com/shop</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://al-ucaaz.com/search</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/category/mens</loc>
-    <lastmod>2026-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://al-ucaaz.com/category/womens</loc>
-    <lastmod>2026-10-07</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/category/accessories</loc>
-    <lastmod>2026-10-07</lastmod>
+    <loc>https://al-ucaaz.com/category/couple</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/category/footwear</loc>
-    <lastmod>2026-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://al-ucaaz.com/product/merino-wool-overcoat</loc>
-    <lastmod>2026-10-07</lastmod>
+    <loc>https://al-ucaaz.com/product/wifey-hubby-couple-set</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/product/silk-midi-dress</loc>
-    <lastmod>2026-10-07</lastmod>
+    <loc>https://al-ucaaz.com/product/bear-print-set</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/product/italian-leather-loafers</loc>
-    <lastmod>2026-10-07</lastmod>
+    <loc>https://al-ucaaz.com/product/burgundy-satin-set</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/product/cashmere-scarf</loc>
-    <lastmod>2026-10-07</lastmod>
+    <loc>https://al-ucaaz.com/product/mustard-tree-print-set</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/product/tailored-linen-blazer</loc>
-    <lastmod>2026-10-07</lastmod>
+    <loc>https://al-ucaaz.com/product/charcoal-starry-dream-set</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/product/leather-crossbody-bag</loc>
-    <lastmod>2026-10-07</lastmod>
+    <loc>https://al-ucaaz.com/product/faith-blossom-orange</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/product/pleated-wide-leg-trousers</loc>
-    <lastmod>2026-10-07</lastmod>
+    <loc>https://al-ucaaz.com/product/faith-blossom-navy</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/product/ceramic-dial-watch</loc>
-    <lastmod>2026-10-07</lastmod>
+    <loc>https://al-ucaaz.com/product/black-abstract-line-art-set</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/product/structured-wool-coat</loc>
-    <lastmod>2026-10-07</lastmod>
+    <loc>https://al-ucaaz.com/product/happy-sunflower-set</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://al-ucaaz.com/product/suede-chelsea-boots</loc>
-    <lastmod>2026-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://al-ucaaz.com/product/ribbed-cashmere-turtleneck</loc>
-    <lastmod>2026-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://al-ucaaz.com/product/wrap-silk-blouse</loc>
-    <lastmod>2026-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://al-ucaaz.com/product/heritage-leather-belt</loc>
-    <lastmod>2026-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://al-ucaaz.com/product/canvas-sneakers</loc>
-    <lastmod>2026-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://al-ucaaz.com/product/draped-jersey-dress</loc>
-    <lastmod>2026-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://al-ucaaz.com/product/slim-fit-chinos</loc>
-    <lastmod>2026-10-07</lastmod>
+    <loc>https://al-ucaaz.com/product/im-not-perfect-set</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

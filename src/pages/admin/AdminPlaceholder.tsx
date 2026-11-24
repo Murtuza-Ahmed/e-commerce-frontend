@@ -22,13 +22,16 @@ const AdminPlaceholder = () => {
     <div>
       <SEO title={`Admin - ${title}`} />
       <div className="mb-8">
-        <h1 className="text-2xl font-display font-bold">{title}</h1>
-        <p className="text-sm font-body text-muted-foreground mt-1">Manage {title.toLowerCase()} for your store.</p>
+        <p className="eyebrow mb-2">Admin</p>
+        <h1 className="font-display font-semibold text-display-3 md:text-display-2">{title}</h1>
+        <p className="text-small font-body text-muted-foreground mt-2">Manage {title.toLowerCase()} for your store.</p>
       </div>
-      <div className="bg-card border border-border rounded-sm p-12 text-center max-w-lg mx-auto">
-        <Construction className="w-10 h-10 mx-auto text-muted-foreground mb-4" />
-        <h2 className="text-lg font-display font-bold mb-2">Coming Soon</h2>
-        <p className="text-sm font-body text-muted-foreground">
+      <div className="bg-card border border-border rounded-sm shadow-card p-12 text-center max-w-lg mx-auto">
+        <div className="w-14 h-14 rounded-sm bg-forest-mist flex items-center justify-center mx-auto mb-5">
+          <Construction className="w-7 h-7 text-primary" />
+        </div>
+        <h2 className="font-display font-semibold text-display-4 mb-2">Coming soon</h2>
+        <p className="text-small font-body text-muted-foreground">
           The {title} section is under construction. Check back later.
         </p>
       </div>
