@@ -34,8 +34,7 @@ function groupOf(p: Permission): string {
   return i > 0 ? p.key.slice(0, i) : "general";
 }
 
-const inputCls =
-  "w-full min-h-11 bg-background border border-border rounded-sm px-3 py-2.5 text-small font-body placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary";
+const inputCls = "input px-3";
 
 const AdminRoles = () => {
   const [roles, setRoles] = useState<Role[]>([]);
@@ -270,7 +269,7 @@ const AdminRoles = () => {
             );
           })}
           {roles.length === 0 && (
-            <div className="bg-card border border-border rounded-sm shadow-card p-8 text-center">
+            <div className="card p-8 text-center">
               <p className="text-small font-body text-muted-foreground">Koi role nahi mila.</p>
             </div>
           )}
@@ -279,7 +278,7 @@ const AdminRoles = () => {
         {/* Detail + permission matrix */}
         <div className="lg:col-span-2">
           {selected ? (
-            <div className="bg-card border border-border rounded-sm shadow-card p-6">
+            <div className="card p-6">
               <div className="flex items-center justify-between gap-3 mb-1">
                 <h2 className="font-display font-semibold text-display-4 flex items-center gap-2 min-w-0">
                   <KeyRound className="w-5 h-5 text-primary shrink-0" />
@@ -313,7 +312,7 @@ const AdminRoles = () => {
                               type="checkbox"
                               checked={on}
                               onChange={() => togglePerm(p.id)}
-                              className="mt-0.5 w-4 h-4 shrink-0 accent-primary"
+                              className="checkbox mt-0.5"
                             />
                             <span className="min-w-0">
                               <span className="block text-caption font-body font-semibold font-mono">{p.key}</span>
@@ -343,7 +342,7 @@ const AdminRoles = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-card border border-border rounded-sm shadow-card p-12 text-center">
+            <div className="card p-12 text-center">
               <Shield className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
               <p className="text-small font-body text-muted-foreground">Role select karo taake permissions dekho.</p>
             </div>
@@ -409,7 +408,7 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-foreground/40" onClick={onClose} />
-      <div className="relative bg-card border border-border rounded-sm shadow-elevated p-6 w-full max-w-md">
+      <div className="relative card-elevated p-6 w-full max-w-md">
         <div className="flex items-center justify-between mb-5">
           <h3 className="font-display font-semibold text-display-4">{title}</h3>
           <button onClick={onClose} aria-label="Close" className="min-h-10 min-w-10 flex items-center justify-center rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">

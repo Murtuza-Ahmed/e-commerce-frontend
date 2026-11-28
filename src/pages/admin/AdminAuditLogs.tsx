@@ -27,8 +27,7 @@ function detailsSummary(details?: Record<string, unknown> | null): string {
   return s.length > 80 ? s.slice(0, 80) + "…" : s;
 }
 
-const inputCls =
-  "bg-card border border-border rounded-sm px-3 py-2.5 min-h-11 text-small font-body placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary";
+const inputCls = "input bg-card px-3";
 
 const AdminAuditLogs = () => {
   const [logs, setLogs] = useState<AuditLog[]>([]);
@@ -93,7 +92,7 @@ const AdminAuditLogs = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-card border border-border rounded-sm shadow-card p-4 mb-6 flex flex-col sm:flex-row gap-3">
+      <div className="card p-4 mb-6 flex flex-col sm:flex-row gap-3">
         <input
           value={action}
           onChange={(e) => setAction(e.target.value)}
@@ -124,7 +123,7 @@ const AdminAuditLogs = () => {
       {loading ? (
         <TableSkeleton rows={8} cols={5} />
       ) : (
-        <div className="bg-card border border-border rounded-sm shadow-card overflow-hidden">
+        <div className="card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -181,14 +180,14 @@ const AdminAuditLogs = () => {
               <button
                 onClick={() => gotoPage(page - 1)}
                 disabled={page <= 1}
-                className="btn-secondary"
+                className="btn-outline btn-sm"
               >
                 <ChevronLeft className="w-3.5 h-3.5" /> Prev
               </button>
               <button
                 onClick={() => gotoPage(page + 1)}
                 disabled={page >= totalPages}
-                className="btn-secondary"
+                className="btn-outline btn-sm"
               >
                 Next <ChevronRight className="w-3.5 h-3.5" />
               </button>

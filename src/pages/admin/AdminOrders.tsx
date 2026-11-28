@@ -55,7 +55,7 @@ const AdminOrders = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-sm shadow-card overflow-hidden">
+      <div className="card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>

@@ -114,12 +114,12 @@ const Checkout = () => {
           <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">1</span>
           Contact
         </li>
-        <li className="flex-1 h-px bg-border" aria-hidden="true" />
+        <li className="divider flex-1" aria-hidden="true" />
         <li className="flex items-center gap-2">
           <span className="w-6 h-6 rounded-full bg-forest-mist text-primary flex items-center justify-center font-semibold">2</span>
           Shipping
         </li>
-        <li className="flex-1 h-px bg-border" aria-hidden="true" />
+        <li className="divider flex-1" aria-hidden="true" />
         <li className="flex items-center gap-2">
           <span className="w-6 h-6 rounded-full bg-forest-mist text-primary flex items-center justify-center font-semibold">3</span>
           Payment
@@ -127,9 +127,9 @@ const Checkout = () => {
       </ol>
 
       {!isAuthenticated && (
-        <div className="bg-forest-mist border border-border rounded-md p-4 mb-8 flex items-center justify-between gap-4">
+        <div className="alert alert-info mb-8">
           <p className="text-sm font-body text-muted-foreground">Already have an account?</p>
-          <Link to="/auth" className="text-sm font-body font-medium text-primary hover:underline">Sign In</Link>
+          <Link to="/auth" className="link">Sign In</Link>
         </div>
       )}
 
@@ -166,7 +166,7 @@ const Checkout = () => {
 
           <div>
             <h2 className="font-display font-semibold text-display-4 mb-4">Payment</h2>
-            <div className="border border-border rounded-md bg-card shadow-card p-6 text-center">
+            <div className="card p-6 text-center">
               <p className="text-sm font-body text-muted-foreground">
                 Payment gateway integration ready (Stripe, PayPal, JazzCash, EasyPaisa)
               </p>
@@ -179,7 +179,7 @@ const Checkout = () => {
 
         {/* Order summary */}
         <div className="lg:col-span-2">
-          <div className="bg-card border border-border rounded-md shadow-card p-6 sticky top-28">
+          <div className="card p-6 sticky top-28">
             <h2 className="font-display font-semibold text-display-4 mb-4">Order Summary</h2>
             <div className="space-y-3 mb-4">
               {items.map((item) => (

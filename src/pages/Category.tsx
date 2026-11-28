@@ -46,12 +46,12 @@ const Category = () => {
         <div className="absolute inset-0 bg-background/85" />
         <div className="absolute inset-0 flex items-center">
           <div className="container">
-            <nav className="flex items-center gap-2 text-xs font-body text-foreground/70 mb-3" aria-label="Breadcrumb">
-              <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+            <nav className="breadcrumb mb-3" aria-label="Breadcrumb">
+              <Link to="/" className="breadcrumb-link">Home</Link>
               <ChevronRight className="w-3 h-3" />
-              <Link to="/shop" className="hover:text-foreground transition-colors">Shop</Link>
+              <Link to="/shop" className="breadcrumb-link">Shop</Link>
               <ChevronRight className="w-3 h-3" />
-              <span className="text-foreground" aria-current="page">{category.name}</span>
+              <span className="breadcrumb-current" aria-current="page">{category.name}</span>
             </nav>
             <p className="eyebrow mb-2">Collection</p>
             <h1 className="text-display-2 text-foreground">{category.name}</h1>

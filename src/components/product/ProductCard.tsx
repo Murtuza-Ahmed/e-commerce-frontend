@@ -30,13 +30,13 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
   // Badges — at most two on the photo; free delivery moved to the price row below.
   const badges: { label: string; className: string }[] = [];
   if (product.isNew) {
-    badges.push({ label: "New", className: "bg-success text-success-foreground" });
+    badges.push({ label: "New", className: "badge-new" });
   }
   if (product.isSale && discount > 0) {
-    badges.push({ label: `-${discount}%`, className: "bg-destructive text-destructive-foreground" });
+    badges.push({ label: `-${discount}%`, className: "badge-sale" });
   }
   if (product.isFlashSale) {
-    badges.push({ label: "Flash Sale", className: "bg-primary text-primary-foreground" });
+    badges.push({ label: "Flash Sale", className: "badge-flash" });
   }
   const visibleBadges = badges.slice(0, 2);
 
@@ -72,7 +72,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         className="group"
       >
         <Link to={`/product/${product.slug}`} className="block">
-          <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-muted shadow-card transition-shadow duration-300 group-hover:shadow-elevated">
+          <div className="product-frame">
             <img
               src={product.images[0]}
               alt={product.name}
@@ -85,7 +85,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                 {visibleBadges.map((badge) => (
                   <span
                     key={badge.label}
-                    className={`${badge.className} text-[10px] font-body font-bold tracking-wider uppercase px-2.5 py-1 rounded-sm`}
+                    className={`badge ${badge.className}`}
                   >
                     {badge.label}
                   </span>
@@ -95,7 +95,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             {/* Wishlist */}
             <button
               onClick={handleWishlist}
-              className="absolute top-3 right-3 w-10 h-10 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full shadow-card hover:bg-background transition-colors"
+              className="absolute top-3 right-3 icon-btn-overlay"
               aria-label="Toggle wishlist"
             >
               <Heart
@@ -117,14 +117,14 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         <div className="mt-3 space-y-1">
           <p className="text-xs text-muted-foreground font-body tracking-wide uppercase">{product.brand}</p>
           <Link to={`/product/${product.slug}`}>
-            <h3 className="font-display font-semibold text-base leading-snug hover:text-primary transition-colors">
+            <h3 className="product-title">
               {product.name}
             </h3>
           </Link>
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-price">{formatPrice(product.basePrice)}</span>
             {product.compareAtPrice && (
-              <span className="text-muted-foreground text-xs line-through">{formatPrice(product.compareAtPrice)}</span>
+              <span className="price-compare text-xs">{formatPrice(product.compareAtPrice)}</span>
             )}
             {discount > 0 && (
               <span className="text-xs font-body font-semibold text-destructive">-{discount}%</span>
@@ -144,7 +144,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                     key={size}
                     type="button"
                     onClick={() => handleQuickAdd(size)}
-                    className="min-w-10 min-h-10 px-2.5 py-2 text-xs font-body font-semibold border border-border rounded-sm hover:border-foreground hover:bg-foreground hover:text-background transition-colors"
+                    className="size-btn"
                   >
                     {size}
                   </button>

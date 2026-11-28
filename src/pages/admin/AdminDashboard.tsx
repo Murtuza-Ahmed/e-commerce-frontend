@@ -98,14 +98,14 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {loading
           ? stats.map((s) => (
-              <div key={s.label} className="bg-card border border-border rounded-sm shadow-card p-5 animate-pulse">
-                <div className="h-10 w-10 rounded-sm bg-muted mb-4" />
-                <div className="h-7 w-16 rounded bg-muted mb-2" />
-                <div className="h-3 w-20 rounded bg-muted" />
+              <div key={s.label} className="card p-5 animate-pulse">
+                <div className="skeleton h-10 w-10 mb-4" />
+                <div className="skeleton h-7 w-16 mb-2" />
+                <div className="skeleton h-3 w-20" />
               </div>
             ))
           : stats.map((s) => (
-              <div key={s.label} className="bg-card border border-border rounded-sm shadow-card p-5">
+              <div key={s.label} className="card p-5">
                 <div className="w-10 h-10 rounded-sm bg-forest-mist flex items-center justify-center mb-4">
                   <s.icon className="w-5 h-5 text-primary" />
                 </div>
@@ -117,7 +117,7 @@ const AdminDashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Quick links */}
-        <div className="bg-card border border-border rounded-sm shadow-card p-6">
+        <div className="card p-6">
           <h2 className="font-display font-semibold text-display-4 mb-5">Quick Links</h2>
           <div className="space-y-2">
             {visibleLinks.map((l) => (
@@ -143,7 +143,7 @@ const AdminDashboard = () => {
 
         {/* Recent activity — sirf super_admin */}
         {superAdmin && (
-          <div className="bg-card border border-border rounded-sm shadow-card p-6">
+          <div className="card p-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="font-display font-semibold text-display-4 flex items-center gap-2">
                 <Activity className="w-4 h-4 text-primary" />
@@ -159,7 +159,7 @@ const AdminDashboard = () => {
             {loading ? (
               <div className="space-y-3 animate-pulse">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="h-10 rounded bg-muted" />
+                  <div key={i} className="skeleton h-10" />
                 ))}
               </div>
             ) : recent.length === 0 ? (

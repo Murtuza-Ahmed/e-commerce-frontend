@@ -13,8 +13,8 @@ const Cart = () => {
     return (
       <div className="container py-16 md:py-20">
         <SEO title="Cart" />
-        <div className="max-w-md mx-auto text-center bg-card border border-border rounded-md shadow-card px-6 py-14">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-forest-mist flex items-center justify-center">
+        <div className="max-w-md mx-auto text-center card px-6 py-14">
+          <div className="empty-state-icon">
             <ShoppingBag className="w-8 h-8 text-primary" />
           </div>
           <h1 className="font-display font-semibold text-display-4 mb-3">Your cart is empty</h1>

@@ -56,7 +56,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
               </h2>
               <button
                 onClick={onClose}
-                className="min-h-10 min-w-10 flex items-center justify-center hover:bg-muted rounded-sm transition-colors"
+                className="icon-btn"
                 aria-label="Close cart"
               >
                 <X className="w-5 h-5" />
@@ -103,7 +103,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                       <Link
                         to={`/product/${item.product.slug}`}
                         onClick={onClose}
-                        className="w-20 aspect-[3/4] flex-shrink-0 overflow-hidden rounded-sm bg-muted"
+                        className="w-20 aspect-[3/4] flex-shrink-0 overflow-hidden rounded-card bg-muted"
                       >
                         <img
                           src={item.product.images[0]}

@@ -14,7 +14,7 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
     return (
       <div className={cn("space-y-1.5", className)}>
         {label && (
-          <label className="text-xs font-body font-semibold tracking-wide uppercase block">
+          <label className="label">
             {label}
           </label>
         )}
@@ -23,11 +23,9 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
             ref={ref}
             type={isPassword && showPassword ? "text" : type}
             className={cn(
-              "w-full px-4 py-3 bg-background border rounded-sm text-sm font-body focus:outline-none focus:ring-2 transition-colors",
+              "input",
               isPassword && "pr-11",
-              error
-                ? "border-destructive focus:ring-destructive/30"
-                : "border-border focus:ring-primary/30"
+              error && "input-error"
             )}
             {...props}
           />
@@ -45,7 +43,7 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
           )}
         </div>
         {error && (
-          <p className="text-xs font-body text-destructive">{error}</p>
+          <p className="error-text">{error}</p>
         )}
       </div>
     );

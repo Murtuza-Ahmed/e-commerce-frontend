@@ -90,7 +90,7 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
             >
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-background/90 hover:bg-muted rounded-full shadow-card transition-colors"
+                className="absolute top-4 right-4 z-10 icon-btn-overlay"
                 aria-label="Close quick view"
               >
                 <X className="w-5 h-5" />
@@ -116,10 +116,10 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
                     <span className="text-price">{formatPrice(selectedVariant.price)}</span>
                     {selectedVariant.compareAtPrice && (
                       <>
-                        <span className="text-base text-muted-foreground line-through">
+                        <span className="price-compare text-base">
                           {formatPrice(selectedVariant.compareAtPrice)}
                         </span>
-                        <span className="bg-destructive text-destructive-foreground text-xs font-body font-bold px-2 py-0.5 rounded-sm">
+                        <span className="badge badge-sale">
                           {discountPercent(selectedVariant.price, selectedVariant.compareAtPrice)}% OFF
                         </span>
                       </>
@@ -176,11 +176,7 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
                             key={size}
                             onClick={() => setSelectedSize(size)}
                             aria-pressed={selectedSize === size}
-                            className={`min-w-12 min-h-11 px-4 py-3 text-xs font-body font-medium border rounded-sm transition-all ${
-                              selectedSize === size
-                                ? "border-foreground bg-foreground text-background"
-                                : "border-border hover:border-foreground"
-                            }`}
+                            className={`size-btn ${selectedSize === size ? "size-btn-active" : ""}`}
                           >
                             {size}
                           </button>
@@ -229,7 +225,7 @@ export function QuickView({ product, open, onClose }: QuickViewProps) {
                   <Link
                     to={`/product/${product.slug}`}
                     onClick={onClose}
-                    className="text-sm font-body text-primary hover:underline mt-auto"
+                    className="link mt-auto"
                   >
                     View full details →
                   </Link>

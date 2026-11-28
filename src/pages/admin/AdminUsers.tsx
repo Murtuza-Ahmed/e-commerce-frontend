@@ -65,7 +65,7 @@ function Modal({
       onClick={onClose}
     >
       <div
-        className="bg-card border border-border rounded-sm shadow-elevated w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"
+        className="card-elevated w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-6">
@@ -250,20 +250,20 @@ const AdminUsers = () => {
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search by name or email…"
           aria-label="Search users"
-          className="w-full min-h-11 pl-9 pr-4 py-2.5 bg-card border border-border rounded-sm text-small font-body placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
+          className="input bg-card pl-9"
         />
       </div>
 
       {loading ? (
         <ProductGridSkeleton count={6} />
       ) : users.length === 0 ? (
-        <div className="bg-card border border-border rounded-sm shadow-card p-12 text-center">
+        <div className="card p-12 text-center">
           <p className="font-body text-muted-foreground">No users found.</p>
         </div>
       ) : (
         <>
           {/* Table */}
-          <div className="bg-card border border-border rounded-sm shadow-card overflow-hidden">
+          <div className="card overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -376,14 +376,14 @@ const AdminUsers = () => {
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page <= 1 || loading}
-                className="btn-secondary"
+                className="btn-outline btn-sm"
               >
                 <ChevronLeft className="w-4 h-4" /> Prev
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page >= totalPages || loading}
-                className="btn-secondary"
+                className="btn-outline btn-sm"
               >
                 Next <ChevronRight className="w-4 h-4" />
               </button>
@@ -401,11 +401,11 @@ const AdminUsers = () => {
             <FormField label="Password" type="password" value={fPassword} onChange={(e) => setFPassword(e.target.value)} required minLength={8} />
             <FormField label="Phone (optional)" type="tel" value={fPhone} onChange={(e) => setFPhone(e.target.value)} />
             <div className="space-y-1.5">
-              <label className="text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground block">Role</label>
+              <label className="label text-muted-foreground tracking-wider">Role</label>
               <select
                 value={fRole}
                 onChange={(e) => setFRole(e.target.value as UserRole)}
-                className="w-full min-h-11 px-4 py-3 bg-background border border-border rounded-sm text-small font-body focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
+                className="input"
               >
                 {ROLES.map((r) => (
                   <option key={r} value={r}>
@@ -430,11 +430,11 @@ const AdminUsers = () => {
         <Modal title="Edit User" onClose={() => setEditing(null)}>
           <form onSubmit={submitEdit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-caption font-body font-semibold tracking-wider uppercase text-muted-foreground block">Email</label>
+              <label className="label text-muted-foreground tracking-wider">Email</label>
               <input
                 value={editing.email}
                 disabled
-                className="w-full min-h-11 px-4 py-3 bg-muted border border-border rounded-sm text-small font-body text-muted-foreground"
+                className="input"
               />
             </div>
             <FormField label="Full Name" type="text" value={eName} onChange={(e) => setEName(e.target.value)} required />

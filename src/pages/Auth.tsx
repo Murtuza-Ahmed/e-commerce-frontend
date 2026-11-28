@@ -68,7 +68,7 @@ const Auth = () => {
     return (
       <div className="min-h-[70vh] flex items-center justify-center py-12 px-6">
         <SEO title="Sign In" description="Sign in to your Al-ucaaz account." />
-        <div className="max-w-md w-full text-center bg-card border border-border rounded-md shadow-elevated px-6 py-10">
+        <div className="max-w-md w-full text-center card-elevated px-6 py-10">
           <p className="eyebrow mb-2">Al-ucaaz</p>
           <h1 className="font-display font-semibold text-display-4 mb-3">Sign-in is unavailable right now</h1>
           <p className="text-sm font-body text-muted-foreground">
@@ -289,7 +289,7 @@ const Auth = () => {
     <div className="min-h-[70vh] flex items-center justify-center py-12">
       <SEO title={t.h} description="Sign in or create your Al-ucaaz account." />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md mx-auto px-4">
-        <div className="bg-card border border-border rounded-md shadow-elevated overflow-hidden">
+        <div className="card-elevated overflow-hidden">
           <div className="h-1.5 bg-primary" aria-hidden="true" />
           <div className="px-6 md:px-8 py-8 md:py-10">
         <div className="text-center mb-10">
@@ -344,39 +344,39 @@ const Auth = () => {
         <div className="text-center mt-6 space-y-2">
           {step === "login" && (
             <>
-              <button onClick={() => go("signup")} className="block w-full text-sm font-body text-muted-foreground hover:text-foreground transition-colors">
+              <button onClick={() => go("signup")} className="link-subtle block w-full">
                 Don&apos;t have an account? Sign up
               </button>
               <div className="flex justify-center gap-4 text-sm font-body">
-                <button onClick={() => go("forgot")} className="text-muted-foreground hover:text-foreground transition-colors">
+                <button onClick={() => go("forgot")} className="link-subtle">
                   Forgot password?
                 </button>
                 <span className="text-muted-foreground/40">·</span>
-                <button onClick={() => go("forgotEmail")} className="text-muted-foreground hover:text-foreground transition-colors">
+                <button onClick={() => go("forgotEmail")} className="link-subtle">
                   Forgot email?
                 </button>
               </div>
             </>
           )}
           {step === "signup" && (
-            <button onClick={() => go("login")} className="text-sm font-body text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={() => go("login")} className="link-subtle">
               Already have an account? Sign in
             </button>
           )}
           {step === "verify" && (
             <button disabled={cooldown > 0 || busy} onClick={() => handleResend("email_verification")}
-              className="text-sm font-body text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50">
+              className="link-subtle disabled:opacity-50">
               {cooldown > 0 ? `Resend OTP in ${cooldown}s` : "Resend OTP"}
             </button>
           )}
           {step === "reset" && (
             <button disabled={cooldown > 0 || busy} onClick={() => handleResend("password_reset")}
-              className="text-sm font-body text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50">
+              className="link-subtle disabled:opacity-50">
               {cooldown > 0 ? `Resend OTP in ${cooldown}s` : "Resend OTP"}
             </button>
           )}
           {["forgot", "forgotEmail", "recoverEmail"].includes(step) && (
-            <button onClick={() => go("login")} className="text-sm font-body text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={() => go("login")} className="link-subtle">
               Back to sign in
             </button>
           )}
@@ -387,7 +387,7 @@ const Auth = () => {
             <p className="text-xs font-body text-muted-foreground mb-1">Your account email is</p>
             <p className="text-lg font-body font-semibold">{maskedEmail}</p>
             <Link to="/auth" onClick={() => { setEmail(""); go("login"); }}
-              className="text-sm font-body text-foreground underline mt-2 inline-block">
+              className="link mt-2 inline-block">
               Sign in
             </Link>
           </div>
