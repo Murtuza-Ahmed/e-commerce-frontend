@@ -112,14 +112,14 @@ const ProductDetail = () => {
 
       {/* Breadcrumb */}
       <nav className="container py-4" aria-label="Breadcrumb">
-        <ol className="flex items-center gap-2 text-xs font-body text-muted-foreground flex-wrap">
-          <li><Link to="/" className="hover:text-foreground transition-colors">Home</Link></li>
+        <ol className="breadcrumb">
+          <li><Link to="/" className="breadcrumb-link">Home</Link></li>
           <li><ChevronRight className="w-3 h-3" /></li>
-          <li><Link to="/shop" className="hover:text-foreground transition-colors">Shop</Link></li>
+          <li><Link to="/shop" className="breadcrumb-link">Shop</Link></li>
           <li><ChevronRight className="w-3 h-3" /></li>
-          <li><Link to={`/category/${product.categorySlug}`} className="hover:text-foreground transition-colors">{product.category}</Link></li>
+          <li><Link to={`/category/${product.categorySlug}`} className="breadcrumb-link">{product.category}</Link></li>
           <li><ChevronRight className="w-3 h-3" /></li>
-          <li className="text-foreground" aria-current="page">{product.name}</li>
+          <li className="breadcrumb-current" aria-current="page">{product.name}</li>
         </ol>
       </nav>
 
@@ -127,7 +127,7 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
           {/* Images */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-            <div className="aspect-[3/4] overflow-hidden rounded-sm bg-muted shadow-card mb-3">
+            <div className="aspect-[3/4] overflow-hidden rounded-card bg-muted shadow-card mb-3">
               <img
                 src={product.images[selectedImage]}
                 alt={product.name}
@@ -142,7 +142,7 @@ const ProductDetail = () => {
                     onClick={() => setSelectedImage(i)}
                     role="tab"
                     aria-selected={i === selectedImage}
-                    className={`w-20 h-24 overflow-hidden rounded-sm border-2 transition-colors ${
+                    className={`w-20 h-24 overflow-hidden rounded-card border-2 transition-colors ${
                       i === selectedImage ? "border-primary" : "border-transparent hover:border-border"
                     }`}
                   >
@@ -189,8 +189,8 @@ const ProductDetail = () => {
               <span className="text-2xl font-body font-bold">{formatPrice(selectedVariant.price)}</span>
               {selectedVariant.compareAtPrice && (
                 <>
-                  <span className="text-lg text-muted-foreground line-through">{formatPrice(selectedVariant.compareAtPrice)}</span>
-                  <span className="bg-destructive text-destructive-foreground text-xs font-body font-bold px-2 py-0.5 rounded-sm">
+                  <span className="price-compare text-lg">{formatPrice(selectedVariant.compareAtPrice)}</span>
+                  <span className="badge badge-sale">
                     {discountPercent(selectedVariant.price, selectedVariant.compareAtPrice)}% OFF
                   </span>
                 </>
@@ -201,7 +201,7 @@ const ProductDetail = () => {
 
             {/* Fabric / fit details — only where the product's detail card states them */}
             {product.details && (
-              <dl className="text-sm font-body space-y-2 mb-6 border border-border rounded-md p-5 bg-card shadow-card">
+              <dl className="card text-sm font-body space-y-2 mb-6 p-5">
                 {product.details.fabric && (
                   <div className="flex gap-3">
                     <dt className="font-semibold w-20 shrink-0">Fabric</dt>
@@ -276,13 +276,7 @@ const ProductDetail = () => {
                         onClick={() => !outOfStock && setSelectedSize(size)}
                         disabled={outOfStock}
                         aria-pressed={selectedSize === size}
-                        className={`min-w-12 min-h-11 px-4 py-3 text-xs font-body font-medium border rounded-sm transition-all ${
-                          selectedSize === size
-                            ? "border-foreground bg-foreground text-background"
-                            : outOfStock
-                            ? "border-border text-muted-foreground/40 cursor-not-allowed line-through"
-                            : "border-border hover:border-foreground"
-                        }`}
+                        className={`size-btn ${selectedSize === size ? "size-btn-active" : ""}`}
                       >
                         {size}
                       </button>
@@ -331,19 +325,19 @@ const ProductDetail = () => {
             {/* Trust badges */}
             <div className="border-t border-border pt-6 space-y-3">
               <div className="flex items-center gap-3 text-xs font-body text-muted-foreground">
-                <span className="w-8 h-8 rounded-full bg-forest-mist flex items-center justify-center shrink-0">
+                <span className="icon-circle">
                   <Truck className="w-4 h-4 text-primary" />
                 </span>
                 Free delivery on orders over {formatPrice(FREE_SHIPPING_THRESHOLD)}
               </div>
               <div className="flex items-center gap-3 text-xs font-body text-muted-foreground">
-                <span className="w-8 h-8 rounded-full bg-forest-mist flex items-center justify-center shrink-0">
+                <span className="icon-circle">
                   <RotateCcw className="w-4 h-4 text-primary" />
                 </span>
                 30-day return policy
               </div>
               <div className="flex items-center gap-3 text-xs font-body text-muted-foreground">
-                <span className="w-8 h-8 rounded-full bg-forest-mist flex items-center justify-center shrink-0">
+                <span className="icon-circle">
                   <Shield className="w-4 h-4 text-primary" />
                 </span>
                 Authenticity guaranteed

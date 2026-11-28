@@ -26,7 +26,7 @@ const AdminPlaceholder = () => {
         <h1 className="font-display font-semibold text-display-3 md:text-display-2">{title}</h1>
         <p className="text-small font-body text-muted-foreground mt-2">Manage {title.toLowerCase()} for your store.</p>
       </div>
-      <div className="bg-card border border-border rounded-sm shadow-card p-12 text-center max-w-lg mx-auto">
+      <div className="card p-12 text-center max-w-lg mx-auto">
         <div className="w-14 h-14 rounded-sm bg-forest-mist flex items-center justify-center mx-auto mb-5">
           <Construction className="w-7 h-7 text-primary" />
         </div>

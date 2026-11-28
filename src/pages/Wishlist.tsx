@@ -34,8 +34,8 @@ const Wishlist = () => {
     return (
       <div className="container py-16 md:py-20">
         <SEO title="Wishlist" />
-        <div className="max-w-md mx-auto text-center bg-card border border-border rounded-md shadow-card px-6 py-14">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-forest-mist flex items-center justify-center">
+        <div className="max-w-md mx-auto text-center card px-6 py-14">
+          <div className="empty-state-icon">
             <Heart className="w-8 h-8 text-primary" />
           </div>
           <h1 className="font-display font-semibold text-display-4 mb-3">Your wishlist is empty</h1>
@@ -62,13 +62,13 @@ const Wishlist = () => {
         <AnimatePresence>
           {items.map((item) => (
             <motion.div key={item.product.id} layout exit={{ opacity: 0, scale: 0.9 }} className="group">
-              <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-muted shadow-card transition-shadow duration-300 group-hover:shadow-elevated">
+              <div className="product-frame">
                 <Link to={`/product/${item.product.slug}`}>
                   <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                 </Link>
                 <button
                   onClick={() => removeItem(item.product.id)}
-                  className="absolute top-3 right-3 w-10 h-10 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full shadow-card hover:bg-background transition-colors"
+                  className="absolute top-3 right-3 icon-btn-overlay"
                   aria-label={`Remove ${item.product.name} from wishlist`}
                 >
                   <X className="w-4 h-4" />
@@ -86,7 +86,7 @@ const Wishlist = () => {
               <div className="mt-3 space-y-1">
                 <p className="text-xs text-muted-foreground font-body tracking-wide uppercase">{item.product.brand}</p>
                 <Link to={`/product/${item.product.slug}`}>
-                  <h3 className="font-display font-semibold text-base leading-snug hover:text-primary transition-colors">{item.product.name}</h3>
+                  <h3 className="product-title">{item.product.name}</h3>
                 </Link>
                 <p className="text-price">{formatPrice(item.product.basePrice)}</p>
               </div>

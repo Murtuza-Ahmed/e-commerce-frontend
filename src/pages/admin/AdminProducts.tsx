@@ -49,7 +49,7 @@ const AdminProducts = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name or SKU..."
-            className="w-full min-h-11 pl-10 pr-4 py-2.5 bg-card border border-border rounded-sm text-small font-body placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+            className="input bg-card pl-10"
             aria-label="Search products"
           />
         </div>
@@ -72,7 +72,7 @@ const AdminProducts = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-sm shadow-card overflow-hidden">
+      <div className="card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>

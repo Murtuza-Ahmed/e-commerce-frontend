@@ -6,11 +6,14 @@
 
 @layer base {
   /*
-   * SINGLE THEME — Forest & Ivory (2026-11-08).
+   * SINGLE THEME — Forest & Ivory (2026-11-08, standardised Phase 2).
    * Official brand identity: Forest Green #183D32 (162 44% 17%) and
    * Ivory #F3F0E7 (45 33% 93%). The Dark + Gold theme was removed
    * completely — no conflicting themes, no legacy gold tokens.
    * All tokens are HSL triplets (hsl(var(--...))) as Tailwind v3 expects.
+   * CSS custom properties are the single source of truth; tailwind.config.ts
+   * maps them to utilities (bg-surface, text-muted, border-border-subtle,
+   * bg-primary-hover, …). Never hard-code a colour in a component.
    */
   :root {
     --background: 45 33% 93%;
@@ -24,12 +27,14 @@
 
     --primary: 162 44% 17%;
     --primary-foreground: 45 33% 93%;
+    --primary-hover: 162 44% 12%;
+    --primary-active: 162 44% 9%;
 
     --secondary: 45 25% 88%;
     --secondary-foreground: 165 30% 16%;
 
     --muted: 45 20% 90%;
-    --muted-foreground: 160 12% 42%;
+    --muted-foreground: 160 12% 38%; /* darkened from 42%: was 4.20:1 on background (below AA 4.5), now 4.93:1 */
 
     --accent: 162 35% 26%;
     --accent-foreground: 45 33% 93%;
@@ -38,6 +43,7 @@
     --destructive-foreground: 0 0% 100%;
 
     --border: 45 15% 82%;
+    --border-subtle: 45 15% 88%;
     --input: 45 15% 82%;
     --ring: 162 44% 17%;
 
@@ -61,14 +67,26 @@
     --ivory-light: 45 30% 97%;
     --ivory-deep: 45 25% 88%;
 
-    /* Custom tokens */
-    --surface-elevated: 45 30% 97%;
-    --badge-sale: 0 55% 42%;
-    --badge-new: 162 44% 22%;
+    /* Surface layers (semantic names for the ivory scale) */
+    --surface: 45 30% 97%;
+    --surface-secondary: 45 20% 90%;
+    --surface-elevated: 0 0% 100%;
+
+    /* Semantic state colours */
     --success: 150 40% 32%;
     --success-foreground: 0 0% 100%;
     --warning: 38 70% 45%;
     --warning-foreground: 0 0% 100%;
+
+    /* Disabled state — a real fill + text colour, not opacity alone */
+    --disabled: 45 15% 82%;
+    --disabled-foreground: 160 10% 55%;
+
+    /* Badges */
+    --badge-sale: 0 55% 42%;
+    --badge-sale-foreground: 0 0% 100%;
+    --badge-new: 162 44% 22%;
+    --badge-new-foreground: 45 33% 93%;
   }
 }
 
@@ -100,25 +118,287 @@
 }
 
 /*
- * Buttons — Design System (Forest & Ivory). 14px / 600, radius 6px,
- * sentence case (no uppercase). Primary is Forest with Ivory text;
- * hover is deeper Forest. Use these classes instead of hand-rolled buttons.
+ * ==========================================================================
+ * DESIGN SYSTEM — component classes (Phase 2).
+ * Use these classes instead of hand-rolling the same utilities in every
+ * file. Component classes live in @layer components, so plain Tailwind
+ * utilities in a className always win over them when a one-off override
+ * is genuinely needed (e.g. .input with min-h-14 for the search field).
+ * ==========================================================================
  */
 @layer components {
+  /* ------------------------------------------------------------------
+   * Buttons — 44px touch target (h-11), 14px / 600, radius 6px,
+   * sentence case (no uppercase). Primary is Forest with Ivory text.
+   * Secondary is a soft filled ivory button; Outline is the bordered
+   * variant (the previous .btn-secondary look). Ghost is text-only.
+   * .btn-ivory is for CTAs sitting on a Forest panel (newsletter).
+   * ------------------------------------------------------------------ */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3 text-sm font-body font-semibold rounded-md transition-colors hover:bg-forest-deep disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 h-11 px-6 bg-primary text-primary-foreground text-button rounded-button transition-colors hover:bg-primary-hover active:bg-primary-active disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 bg-transparent text-primary border border-primary/40 px-6 py-3 text-sm font-body font-semibold rounded-md transition-colors hover:bg-primary/5 disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 h-11 px-6 bg-secondary text-secondary-foreground text-button rounded-button transition-colors hover:bg-ivory-deep active:bg-ivory-deep/70 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 h-11 px-6 bg-transparent text-primary border border-primary/40 text-button rounded-button transition-colors hover:bg-primary/5 active:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 bg-transparent text-muted-foreground px-6 py-3 text-sm font-body font-semibold rounded-md transition-colors hover:bg-muted hover:text-foreground disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 h-11 px-6 bg-transparent text-muted-foreground text-button rounded-button transition-colors hover:bg-muted hover:text-foreground active:bg-muted/70 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center gap-2 bg-destructive text-destructive-foreground px-6 py-3 text-sm font-body font-semibold rounded-md transition-colors hover:opacity-90 disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 h-11 px-6 bg-destructive text-destructive-foreground text-button rounded-button transition-colors hover:opacity-90 active:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ivory {
+    @apply inline-flex items-center justify-center gap-2 h-11 px-6 bg-ivory text-primary text-button rounded-button transition-colors hover:bg-ivory-light active:bg-ivory-deep disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Button sizes — apply alongside a variant, e.g. "btn-primary btn-sm". */
+  .btn-sm {
+    @apply h-9 px-4 text-[13px];
+  }
+
+  .btn-lg {
+    @apply h-12 px-8 text-base;
+  }
+
+  /* Loading state — dims the button and blocks clicks; the caller renders
+   * a spinner icon (lucide Loader2 + animate-spin) inside the button. */
+  .btn-loading {
+    @apply pointer-events-none opacity-70;
+  }
+
+  /* ------------------------------------------------------------------
+   * Forms — one shared input style for text / email / password / tel /
+   * search / number inputs, selects and textareas. Error state is a
+   * separate class so the same markup works with and without an error.
+   * ------------------------------------------------------------------ */
+  .input,
+  .select,
+  .textarea {
+    @apply w-full min-h-11 px-4 bg-background border border-border rounded-input text-small font-body placeholder:text-muted-foreground/60 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed;
+  }
+
+  .select {
+    @apply appearance-none pr-10 cursor-pointer;
+  }
+
+  .textarea {
+    @apply min-h-24 py-3 resize-y;
+  }
+
+  .input-error {
+    @apply border-destructive focus:ring-destructive/30 focus:border-destructive;
+  }
+
+  /* Form label — uppercase 12px / 600, the convention in Auth/Checkout
+   * and admin forms. Use text-label (14px / 600, sentence case) for
+   * inline legends where an uppercase label would be too loud. */
+  .label {
+    @apply block text-xs font-body font-semibold tracking-wide uppercase;
+  }
+
+  .helper-text {
+    @apply text-caption font-body text-muted-foreground;
+  }
+
+  .error-text {
+    @apply text-caption font-body text-destructive;
+  }
+
+  .checkbox,
+  .radio {
+    @apply h-4 w-4 shrink-0 accent-primary cursor-pointer disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* ------------------------------------------------------------------
+   * Badges — at most two on a product photo. Sale is red, New is
+   * forest, Flash Sale is primary. See ProductCard for the cap.
+   * ------------------------------------------------------------------ */
+  .badge {
+    @apply inline-flex items-center gap-1 text-[10px] font-body font-bold tracking-wider uppercase px-2.5 py-1 rounded-sm;
+  }
+
+  .badge-sale {
+    @apply bg-badge-sale text-badge-sale-foreground;
+  }
+
+  .badge-new {
+    @apply bg-badge-new text-badge-new-foreground;
+  }
+
+  .badge-flash {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  /* ------------------------------------------------------------------
+   * Links — .link for a primary-coloured text link on ivory,
+   * .link-subtle for the quiet muted links (auth step links).
+   * ------------------------------------------------------------------ */
+  .link {
+    @apply text-sm font-body font-medium text-primary hover:underline underline-offset-2 transition-colors;
+  }
+
+  .link-subtle {
+    @apply text-sm font-body text-muted-foreground hover:text-foreground transition-colors;
+  }
+
+  /* ------------------------------------------------------------------
+   * Breadcrumbs — one pattern for Shop / Category / Product Detail.
+   * ------------------------------------------------------------------ */
+  .breadcrumb {
+    @apply flex items-center gap-2 text-xs font-body text-muted-foreground flex-wrap;
+  }
+
+  .breadcrumb-link {
+    @apply hover:text-primary transition-colors;
+  }
+
+  .breadcrumb-current {
+    @apply text-foreground font-medium;
+  }
+
+  /* ------------------------------------------------------------------
+   * Cards — the standard surface. .card for default surfaces,
+   * .card-elevated for modals, drawers and toasts. Padding is set
+   * per use (p-4 / p-5 / p-6 / p-card) — the class only fixes the
+   * surface, border, radius and shadow.
+   * ------------------------------------------------------------------ */
+  .card {
+    @apply bg-card text-card-foreground border border-border rounded-card shadow-card;
+  }
+
+  .card-elevated {
+    @apply bg-card text-card-foreground border border-border rounded-card shadow-elevated;
+  }
+
+  /* ------------------------------------------------------------------
+   * Icon buttons — .icon-btn for a plain 40px round button on ivory
+   * (drawer/modal close buttons), .icon-btn-overlay for the same button
+   * floating over a product photo (wishlist, quick-view close).
+   * ------------------------------------------------------------------ */
+  .icon-btn {
+    @apply min-h-10 min-w-10 flex items-center justify-center rounded-full text-foreground hover:bg-muted transition-colors;
+  }
+
+  .icon-btn-overlay {
+    @apply w-10 h-10 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full shadow-card hover:bg-background transition-colors;
+  }
+
+  /* Small icon circle — the 32px forest-mist circle behind trust icons
+   * (Product Detail trust rows). */
+  .icon-circle {
+    @apply w-8 h-8 rounded-full bg-forest-mist flex items-center justify-center shrink-0;
+  }
+
+  /* ------------------------------------------------------------------
+   * Size buttons — one pattern for ProductCard quick-add, QuickView and
+   * Product Detail. Selected state is .size-btn-active; out-of-stock
+   * uses the native disabled attribute (line-through + muted).
+   * ------------------------------------------------------------------ */
+  .size-btn {
+    @apply min-w-11 min-h-11 px-4 py-3 text-xs font-body font-medium border border-border rounded-sm transition-colors hover:border-foreground disabled:cursor-not-allowed disabled:line-through disabled:text-muted-foreground/40 disabled:border-border disabled:hover:border-border;
+  }
+
+  .size-btn-active {
+    @apply border-foreground bg-foreground text-background hover:border-foreground;
+  }
+
+  /* ------------------------------------------------------------------
+   * Alerts — sonner toasts are the alert delivery mechanism; these
+   * classes are for inline banners (e.g. Checkout "Already have an
+   * account?"). .alert is the shell, the second class is the tone.
+   * ------------------------------------------------------------------ */
+  .alert {
+    @apply flex items-center justify-between gap-4 border rounded-card p-4 text-sm font-body;
+  }
+
+  .alert-info {
+    @apply bg-forest-mist border-border text-muted-foreground;
+  }
+
+  .alert-success {
+    @apply bg-success/10 border-success/30 text-success;
+  }
+
+  .alert-warning {
+    @apply bg-warning/10 border-warning/30 text-warning;
+  }
+
+  .alert-error {
+    @apply bg-error/10 border-error/30 text-error;
+  }
+
+  /* ------------------------------------------------------------------
+   * Empty states — the shared pattern for Cart / Wishlist / Search
+   * "nothing here" screens: centred icon in a forest-mist circle,
+   * display heading, muted copy, primary CTA.
+   * ------------------------------------------------------------------ */
+  .empty-state {
+    @apply text-center py-16 md:py-24;
+  }
+
+  .empty-state-icon {
+    @apply w-16 h-16 mx-auto mb-6 rounded-full bg-forest-mist flex items-center justify-center;
+  }
+
+  /* ------------------------------------------------------------------
+   * Chips — pill filters (Shop category filters, Search suggestions).
+   * .chip-active is the selected state.
+   * ------------------------------------------------------------------ */
+  .chip {
+    @apply inline-flex items-center justify-center min-h-10 text-xs font-body font-medium px-3 py-1.5 rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted/80;
+  }
+
+  .chip-active {
+    @apply bg-primary text-primary-foreground hover:bg-primary;
+  }
+
+  /* ------------------------------------------------------------------
+   * Product — the product card frame and title. The frame is a 3:4
+   * portrait on a muted ground with the card shadow, lifting on hover
+   * inside a .group. The title is Cormorant 16px / semibold.
+   * ------------------------------------------------------------------ */
+  .product-frame {
+    @apply relative aspect-[3/4] overflow-hidden rounded-card bg-muted shadow-card transition-shadow duration-300 group-hover:shadow-elevated;
+  }
+
+  .product-title {
+    @apply font-display font-semibold text-base leading-snug hover:text-primary transition-colors;
+  }
+
+  /* Compare-at price — muted + struck through; size stays with the
+   * context (xs on cards, base on Quick View, lg on Product Detail). */
+  .price-compare {
+    @apply text-muted-foreground line-through;
+  }
+
+  /* Loading skeleton — muted block with a pulse. */
+  .skeleton {
+    @apply bg-muted animate-pulse rounded-sm;
+  }
+
+  /* ------------------------------------------------------------------
+   * Layout — section spacing tokens. Defined for the Phase 3 page work;
+   * pages are NOT re-spaced in this phase, so these classes are not
+   * applied to any page yet.
+   * ------------------------------------------------------------------ */
+  .section {
+    @apply py-section;
+  }
+
+  .section-sm {
+    @apply py-section-sm;
+  }
+
+  /* Hairline divider. */
+  .divider {
+    @apply h-px bg-border w-full;
   }
 
   /* Editorial eyebrow label — small-caps kicker above headings. */

@@ -53,7 +53,7 @@ const Search = () => {
             onChange={(e) => handleChange(e.target.value)}
             placeholder="Search products..."
             autoFocus
-            className="w-full min-h-14 pl-12 pr-12 py-4 bg-card border border-border rounded-sm text-base font-body focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="input min-h-14 pl-12 pr-12 py-4 text-base bg-card"
             aria-label="Search products"
           />
           {query && (
@@ -73,7 +73,7 @@ const Search = () => {
               <button
                 key={s}
                 onClick={() => handleChange(s)}
-                className="min-h-10 text-xs font-body px-3 py-1.5 rounded-full bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+                className="chip hover:bg-primary hover:text-primary-foreground"
               >
                 {s}
               </button>
@@ -90,8 +90,8 @@ const Search = () => {
           {results.length > 0 ? (
             <ProductGrid products={results} />
           ) : (
-            <div className="text-center py-16 md:py-24 bg-card border border-border rounded-md shadow-card">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-forest-mist flex items-center justify-center">
+            <div className="card empty-state">
+              <div className="empty-state-icon">
                 <SearchX className="w-8 h-8 text-primary" />
               </div>
               <h2 className="font-display font-semibold text-display-4 mb-2">No results found</h2>

@@ -39,10 +39,10 @@ const Shop = () => {
       <SEO title="Shop All" description="Browse our complete collection of premium night suits & pajama sets." />
 
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs font-body text-muted-foreground mb-6" aria-label="Breadcrumb">
-        <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+      <nav className="breadcrumb mb-6" aria-label="Breadcrumb">
+        <Link to="/" className="breadcrumb-link">Home</Link>
         <ChevronRight className="w-3 h-3" />
-        <span className="text-foreground" aria-current="page">Shop</span>
+        <span className="breadcrumb-current" aria-current="page">Shop</span>
       </nav>
 
       <div className="mb-8">
@@ -65,9 +65,7 @@ const Shop = () => {
           <div className="hidden md:flex items-center gap-2" role="group" aria-label="Category filters">
             <button
               onClick={() => setSelectedCategory("all")}
-              className={`min-h-10 text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
-                selectedCategory === "all" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
-              }`}
+              className={`chip tracking-wide ${selectedCategory === "all" ? "chip-active" : ""}`}
               aria-pressed={selectedCategory === "all"}
             >
               All
@@ -76,9 +74,7 @@ const Shop = () => {
               <button
                 key={cat.slug}
                 onClick={() => setSelectedCategory(cat.slug)}
-                className={`min-h-10 text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
-                  selectedCategory === cat.slug ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
-                }`}
+                className={`chip tracking-wide ${selectedCategory === cat.slug ? "chip-active" : ""}`}
                 aria-pressed={selectedCategory === cat.slug}
               >
                 {cat.shortLabel ?? cat.name}
@@ -94,7 +90,7 @@ const Shop = () => {
               id="sort-select"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="appearance-none min-h-10 text-xs font-body font-medium pl-3 pr-8 py-2 border border-border rounded-sm bg-card cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30"
+              className="select min-h-10 text-xs pl-3 pr-8 py-2 bg-card"
             >
               <option value="newest">Newest</option>
               <option value="price-asc">Price: Low to High</option>
@@ -129,9 +125,7 @@ const Shop = () => {
         <div className="md:hidden flex flex-wrap gap-2 mb-6" role="group" aria-label="Category filters">
           <button
             onClick={() => setSelectedCategory("all")}
-            className={`min-h-10 text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
-              selectedCategory === "all" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-            }`}
+            className={`chip tracking-wide ${selectedCategory === "all" ? "chip-active" : ""}`}
           >
             All
           </button>
@@ -139,9 +133,7 @@ const Shop = () => {
             <button
               key={cat.slug}
               onClick={() => setSelectedCategory(cat.slug)}
-              className={`min-h-10 text-xs font-body font-medium tracking-wide px-3 py-1.5 rounded-full transition-colors ${
-                selectedCategory === cat.slug ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-              }`}
+              className={`chip tracking-wide ${selectedCategory === cat.slug ? "chip-active" : ""}`}
             >
               {cat.shortLabel ?? cat.name}
             </button>
@@ -152,8 +144,8 @@ const Shop = () => {
       {filtered.length > 0 ? (
         <ProductGrid products={filtered} columns={columns} />
       ) : (
-        <div className="text-center py-16 md:py-24 bg-card border border-border rounded-md shadow-card">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-forest-mist flex items-center justify-center">
+        <div className="card empty-state">
+          <div className="empty-state-icon">
             <SearchX className="w-8 h-8 text-primary" />
           </div>
           <h2 className="font-display font-semibold text-display-4 mb-2">No pieces found</h2>

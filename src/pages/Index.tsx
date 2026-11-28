@@ -99,7 +99,7 @@ const Index = () => {
                   Shop Night Suits
                   <ArrowRight className="w-4 h-4" />
                 </Link>
-                <button onClick={() => setSizeGuideOpen(true)} className="btn-secondary">
+                <button onClick={() => setSizeGuideOpen(true)} className="btn-outline">
                   <Ruler className="w-4 h-4" />
                   Size Guide
                 </button>
@@ -419,7 +419,7 @@ const Index = () => {
               />
               <button
                 type="submit"
-                className="inline-flex items-center justify-center gap-2 bg-ivory text-primary px-6 py-3 text-sm font-body font-semibold rounded-md transition-colors hover:bg-ivory-light"
+                className="btn-ivory"
               >
                 Subscribe
               </button>
