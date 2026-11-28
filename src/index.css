@@ -384,9 +384,10 @@
   }
 
   /* ------------------------------------------------------------------
-   * Layout — section spacing tokens. Defined for the Phase 3 page work;
-   * pages are NOT re-spaced in this phase, so these classes are not
-   * applied to any page yet.
+   * Layout — section spacing tokens. Adopted on the homepage in Phase 3
+   * (Collections, Featured, Promo, Size Guide use .section; the
+   * Newsletter wrapper uses .section-sm). Other pages keep their
+   * existing section padding until their own phase.
    * ------------------------------------------------------------------ */
   .section {
     @apply py-section;

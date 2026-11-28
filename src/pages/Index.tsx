@@ -9,16 +9,45 @@ import { SITE_URL } from "@/constants";
 import { SizeGuideModal, SizeGuideTable } from "@/components/night-suit/SizeGuide";
 import { SIZE_GUIDE_BADGES, SIZE_GUIDE_IMAGE } from "@/data/sizeGuide";
 import { formatPrice } from "@/lib/format";
+import type { Product } from "@/types";
 
 const Index = () => {
   const newArrivals = products.filter((p) => p.isNew);
-  const featured = products.slice(0, 4);
   const happySet = products.find((p) => p.slug === "happy-sunflower-set");
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   // Newsletter is local-only until a backend exists: the email is kept in
   // localStorage and a success message is shown, nothing is sent anywhere.
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterDone, setNewsletterDone] = useState(false);
+
+  // Featured — curated by photography quality, not data order. Every product
+  // gets exactly one homepage moment: Happy Sunflower is the campaign star
+  // (banner below) and the Couple set leads the Collections cards, so the
+  // other eight appear here. No product is hidden; the rest live on Shop.
+  // Best-resolution portrait photos lead the grid; the three low-resolution
+  // sets (Bear, Burgundy, Mustard — Phase 1B L-4, blocked on originals from
+  // john) sit in the second row.
+  const FEATURED_SLUGS = [
+    "charcoal-starry-dream-set",
+    "faith-blossom-orange",
+    "black-abstract-line-art-set",
+    "im-not-perfect-set",
+    "faith-blossom-navy",
+    "bear-print-set",
+    "burgundy-satin-set",
+    "mustard-tree-print-set",
+  ];
+  const featured = FEATURED_SLUGS.map((slug) => products.find((p) => p.slug === slug)).filter(
+    (p): p is Product => Boolean(p),
+  );
+
+  // Homepage-only collection imagery: the Women's card would otherwise reuse
+  // the exact hero photo (charcoal-starry-dream-set.jpg) — the same image
+  // twice on one page. The Faith Navy model crop is a clean model shot from
+  // the same collection. products.ts and the Category pages are untouched.
+  const COLLECTION_IMAGES: Record<string, string> = {
+    womens: "/assets/night-suits/faith-blossom-navy-model.jpg",
+  };
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +66,9 @@ const Index = () => {
   };
 
   // Static announcement bar items (same items as the old marquee, no animation).
+  // Wording kept exactly as-is: the free-delivery line here ("Free Delivery
+  // All Pakistan") and the header top bar ("...ON ORDERS OVER Rs 2,999")
+  // contradict each other — that is open decision D5, BLOCKED on john.
   const announcementItems = [
     "50% OFF New Arrival",
     "Free Delivery All Pakistan",
@@ -74,7 +106,12 @@ const Index = () => {
           was 7/5, which left ~400px of dead space under the text column),
           stacked on mobile (text first, so CTAs are reachable and no text
           sits over the image). Photo is the real product — Charcoal Starry
-          Dream Set. The 3D fabric hero was removed 2026-11-07 (Phase 0.3). */}
+          Dream Set. The 3D fabric hero was removed 2026-11-07 (Phase 0.3).
+          Phase 3: one consistent 4/5 portrait frame at every viewport — the
+          old sm:aspect-[4/3] switch made the crop look accidental at tablet
+          width. The source photo crops the model at the neck (Phase 1B M-4,
+          blocked on a clean original from john); the 4/5 frame keeps that
+          crop steady so it reads as an intentional editorial crop. */}
       <section className="bg-background text-foreground overflow-hidden">
         <div className="container py-12 md:py-20 lg:py-24">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
@@ -141,7 +178,7 @@ const Index = () => {
                 <img
                   src="/assets/night-suits/charcoal-starry-dream-set.jpg"
                   alt="Charcoal Starry Dream Set — model wearing the moon and stars print pajama set"
-                  className="w-full aspect-[3/4] sm:aspect-[4/3] lg:aspect-[4/5] object-cover rounded-md shadow-hero ring-1 ring-border"
+                  className="w-full aspect-[4/5] object-cover rounded-md shadow-hero ring-1 ring-border"
                 />
                 <div className="mt-4 flex items-center justify-between gap-3">
                   <div>
@@ -173,8 +210,10 @@ const Index = () => {
         </p>
       </div>
 
-      {/* Collections — editorial 3:4 cards, subtle hover zoom, token scrim. */}
-      <section className="container py-16 md:py-24">
+      {/* Collections — editorial 3:4 cards, subtle hover zoom, token scrim.
+          Two collections, two cards: an intentional two-column layout, no
+          filler third card (Phase 1 audit M-2). */}
+      <section className="container section">
         <div className="flex items-end justify-between mb-10">
           <div>
             <p className="eyebrow mb-2">Browse</p>
@@ -200,16 +239,19 @@ const Index = () => {
                 className="group block relative aspect-[3/4] overflow-hidden rounded-sm"
               >
                 <img
-                  src={cat.image}
+                  src={COLLECTION_IMAGES[cat.slug] ?? cat.image}
                   alt={cat.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-forest-deep/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 p-5">
+                <div className="absolute bottom-0 left-0 right-0 p-5">
                   <h3 className="font-display text-lg md:text-xl font-semibold text-ivory-light">
                     {cat.name}
                   </h3>
+                  <p className="hidden md:block text-small font-body text-ivory-light/80 mt-1 line-clamp-2">
+                    {cat.description}
+                  </p>
                   <p className="text-caption font-body text-ivory-light/80 mt-1">
                     {cat.productCount} piece{cat.productCount === 1 ? "" : "s"}
                   </p>
@@ -220,9 +262,11 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Featured Products */}
+      {/* Featured Products — curated eight (see FEATURED_SLUGS above): every
+          product gets one homepage moment, so the grid is two balanced rows
+          on desktop (4 + 4) instead of an arbitrary first-four slice. */}
       <section className="bg-secondary/50">
-        <div className="container py-16 md:py-24">
+        <div className="container section">
           <div className="flex items-end justify-between mb-10">
             <div>
               <p className="eyebrow mb-2">Curated</p>
@@ -245,9 +289,14 @@ const Index = () => {
 
       {/* Promo banner — campaign-style, forest + ivory. Prices and discount
           come from the data (formatPrice + compareAtPrice); no dark gradient,
-          no hardcoded colours. */}
+          no hardcoded colours. Phase 3: the banner image is now the CLEAN
+          flat-lay (happy-sunflower-set-clean.jpg), not the promo composite —
+          the composite's baked-in "NEW ARRIVAL / 50% OFF" text cropped
+          awkwardly at 768px (Phase 2 observation) and duplicated the banner's
+          own typography. The copy is unchanged, including "Free Delivery all
+          over Pakistan." (open decision D5, BLOCKED on john). */}
       {happySet && (
-        <section className="container py-16 md:py-24">
+        <section className="container section">
           <div className="panel-forest rounded-sm overflow-hidden shadow-elevated">
             <div className="grid md:grid-cols-2">
               <div className="px-8 md:px-12 lg:px-16 py-12 md:py-16 lg:py-20">
@@ -271,24 +320,18 @@ const Index = () => {
                 <p className="text-small text-ivory-light/80 mb-8 flex items-center gap-2">
                   <Truck className="w-4 h-4 shrink-0" /> Free Delivery all over Pakistan.
                 </p>
-                <Link
-                  to={`/product/${happySet.slug}`}
-                  className="inline-flex items-center justify-center gap-2 bg-ivory text-primary px-6 py-3 text-sm font-body font-semibold rounded-md transition-colors hover:bg-ivory-light"
-                >
+                <Link to={`/product/${happySet.slug}`} className="btn-ivory">
                   Shop the Set
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
               <Link
                 to={`/product/${happySet.slug}`}
-                className="group relative block min-h-64 md:min-h-full overflow-hidden"
+                className="group relative block overflow-hidden aspect-[3/4] md:aspect-auto md:min-h-full"
                 aria-label={happySet.name}
               >
-                {/* The promo composite stays the banner image only (Phase 1B):
-                    its baked-in text is cropped away by this wide frame,
-                    while the product card uses the clean crop. */}
                 <img
-                  src="/assets/night-suits/happy-sunflower-set.jpg"
+                  src="/assets/night-suits/happy-sunflower-set-clean.jpg"
                   alt={happySet.name}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
@@ -310,7 +353,7 @@ const Index = () => {
           grid uses only as many columns as there are arrivals, so no
           trailing empty cells appear. */}
       {newArrivals.length >= 2 && (
-        <section className="container pb-16 md:pb-24">
+        <section className="container section">
           <div className="flex items-end justify-between mb-10">
             <div>
               <p className="eyebrow mb-2">Just In</p>
@@ -339,9 +382,14 @@ const Index = () => {
         </section>
       )}
 
-      {/* Size Guide */}
+      {/* Size Guide — supporting section, kept after product discovery so it
+          does not interrupt the shopping journey. Table + photo + modal all
+          preserved; the photo is shown whole (object-contain, 3:2) so no row
+          or column is cropped (Phase 1 audit H-4). The size-guide graphic
+          itself still has "AL UCCAZ" baked into its header — a clean graphic
+          is wanted from john. */}
       <section id="size-guide" className="bg-secondary/50">
-        <div className="container py-16 md:py-24">
+        <div className="container section">
           <div className="flex items-end justify-between gap-4 mb-10">
             <div>
               <p className="eyebrow mb-2 flex items-center gap-2">
@@ -388,46 +436,48 @@ const Index = () => {
       </section>
 
       {/* Newsletter — local-only: the email is saved in this browser only,
-          nothing is sent to a backend. */}
-      <section className="panel-forest">
-        <div className="container py-16 md:py-20 text-center">
-          <p className="eyebrow mb-3 text-ivory-light/80">Newsletter</p>
-          <h2 className="font-display text-display-3 font-semibold text-ivory-light mb-3">
-            Stay in the Loop
-          </h2>
-          <p className="text-body text-ivory-light/80 mb-8 max-w-md mx-auto">
-            Subscribe for new night-suit drops, restocks, and private sales.
-          </p>
-          {newsletterDone ? (
-            <p className="text-small font-body text-ivory-light max-w-md mx-auto" role="status">
-              You&rsquo;re on the list — saved in this browser only. New drops, restocks and
-              private sales will be shared here when they go live.
+          nothing is sent to a backend. Phase 3: a contained Forest card on
+          ivory instead of a full-bleed Forest panel — the old panel ran
+          straight into the Forest footer with no visual break, so the two
+          dark blocks read as one. Copy and behaviour are unchanged. */}
+      <section className="section-sm">
+        <div className="container">
+          <div className="panel-forest rounded-card shadow-elevated px-6 py-12 md:px-12 md:py-16 text-center">
+            <p className="eyebrow mb-3 text-ivory-light/80">Newsletter</p>
+            <h2 className="font-display text-display-3 font-semibold text-ivory-light mb-3">
+              Stay in the Loop
+            </h2>
+            <p className="text-body text-ivory-light/80 mb-8 max-w-md mx-auto">
+              Subscribe for new night-suit drops, restocks, and private sales.
             </p>
-          ) : (
-            <form
-              className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-              onSubmit={handleNewsletterSubmit}
-            >
-              <input
-                type="email"
-                required
-                value={newsletterEmail}
-                onChange={(e) => setNewsletterEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 bg-ivory-light border border-border rounded-sm text-sm font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ivory-light/50"
-                aria-label="Email address for newsletter"
-              />
-              <button
-                type="submit"
-                className="btn-ivory"
+            {newsletterDone ? (
+              <p className="text-small font-body text-ivory-light max-w-md mx-auto" role="status">
+                You&rsquo;re on the list — saved in this browser only. New drops, restocks and
+                private sales will be shared here when they go live.
+              </p>
+            ) : (
+              <form
+                className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+                onSubmit={handleNewsletterSubmit}
               >
-                Subscribe
-              </button>
-            </form>
-          )}
-          <p className="text-caption font-body text-ivory-light/60 mt-4">
-            Saved only in this browser — no account needed.
-          </p>
+                <input
+                  type="email"
+                  required
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="flex-1 px-4 py-3 bg-ivory-light border border-border rounded-sm text-sm font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ivory-light/50"
+                  aria-label="Email address for newsletter"
+                />
+                <button type="submit" className="btn-ivory">
+                  Subscribe
+                </button>
+              </form>
+            )}
+            <p className="text-caption font-body text-ivory-light/60 mt-4">
+              Saved only in this browser — no account needed.
+            </p>
+          </div>
         </div>
       </section>
 
