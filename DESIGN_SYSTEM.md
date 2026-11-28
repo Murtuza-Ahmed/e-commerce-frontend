@@ -161,8 +161,9 @@ spacing). Uppercase is reserved for `.eyebrow` (12px, tracking 0.2em) and
 | `space-card-sm` | `1rem` | Card padding (compact) |
 
 > `.section` / `.section-sm` utility classes (py-section / py-section-sm) are
-> defined for Phase 3 adoption and are **not yet applied to any page** — pages
-> keep their existing section padding in Phase 2.
+> adopted on the homepage in Phase 3 (Collections, Featured, Promo and Size
+> Guide use `.section`; the Newsletter wrapper uses `.section-sm`). Other
+> pages keep their existing section padding until their own phase.
 
 Standard Tailwind spacing (`p-4`, `gap-6`, `mb-8`…) continues unchanged.
 
@@ -302,7 +303,7 @@ Password toggle button stays 20px, `tabIndex={-1}`, inside the input with `pr-11
 | Class | Use |
 |---|---|
 | `.panel-forest` | Forest panel (footer, newsletter, promo) — `bg-primary text-primary-foreground` |
-| `.section` / `.section-sm` | `py-section` / `py-section-sm` — **defined, not yet applied** (Phase 3 adoption) |
+| `.section` / `.section-sm` | `py-section` / `py-section-sm` — **adopted on the homepage in Phase 3** (Collections, Featured, Promo, Size Guide use `.section`; Newsletter wrapper uses `.section-sm`) |
 
 ---
 
@@ -439,7 +440,28 @@ are documented here, not fixed:
 
 ---
 
-## 11. Files
+## 12. Phase 3 adoption (28 Nov 2026 — homepage redesign)
+
+- `.section` / `.section-sm` are now applied on the homepage
+  (see §4.1 / §5.6). No other page was re-spaced.
+- **Promo banner image:** the banner now uses the clean flat-lay
+  `happy-sunflower-set-clean.jpg` instead of the promo composite
+  `happy-sunflower-set.jpg` — the composite's baked-in text cropped
+  awkwardly at 768px (Phase 2 observation, now fixed at the root). The
+  composite is still used nowhere as a product photo.
+- **Homepage-only collection imagery:** `src/pages/Index.tsx` maps the
+  Women's collection card to `faith-blossom-navy-model.jpg` so the hero
+  photo is not repeated on the same page. `src/data/products.ts` and the
+  Category pages are untouched.
+- **Featured curation:** the homepage Featured grid is curated by slug in
+  `Index.tsx` (best photography first, 8 products); Happy Sunflower stays
+  the campaign star and the Couple set leads Collections, so every product
+  gets exactly one homepage moment. No product data was changed.
+- **Newsletter:** contained Forest card on ivory (was a full-bleed Forest
+  panel directly above the Forest footer). Copy and local-only behaviour
+  unchanged.
+
+No token was added or changed in Phase 3.
 
 - Tokens: `src/index.css` (`:root` + `@layer components`), `tailwind.config.ts`
 - Shared field: `src/components/ui/FormField.tsx`
